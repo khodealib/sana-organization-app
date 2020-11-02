@@ -39,7 +39,7 @@ public class ApiClient {
 
                         Request newRequest = oldRequest.newBuilder()
                                 .url(requestUrl)
-                                .addHeader("Authorization", "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvYXNlbmEtYXBpLmFzZW5hZGV2LmNvbVwvYXBpXC9jbGllbnRcL2xvZ2luIiwiaWF0IjoxNjAzNzgxMjk4LCJleHAiOjE2MDQzODYwOTgsIm5iZiI6MTYwMzc4MTI5OCwianRpIjoiMldOWVpGN2VLaVowTnV5aSIsInN1YiI6NywicHJ2IjoiYjk0Y2RmODlhZjE4NDc1OGY5NjU5YTM5MGI2ZTgxNmRhMTM4YTI4ZiJ9.SPM5jH6972u-_YSZE0xFYZxByyTuc1ih2Mi4CwBYqsA")
+                                .addHeader("Authorization", "Bearer " + token)
                                 .build();
 
                         return chain.proceed(newRequest);

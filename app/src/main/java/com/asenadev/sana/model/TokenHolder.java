@@ -3,17 +3,14 @@ package com.asenadev.sana.model;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class TokenHolder {
 
-    private final SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences=null;
 
-    public TokenHolder(Application application) {
-        sharedPreferences = application.getSharedPreferences("bearer_token", Context.MODE_PRIVATE);
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(((sharedPreferences, s) -> {
-
-        }));
+    public TokenHolder(Context context) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
     }
 

@@ -1,47 +1,38 @@
 package com.asenadev.sana.model;
 
 import android.app.Application;
+import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.asenadev.sana.model.login.LoginResponse;
 import com.asenadev.sana.model.remote.ApiClient;
 import com.asenadev.sana.model.remote.ApiService;
+import com.asenadev.sana.model.remote.ApiServiceProvider;
 
 import io.reactivex.Completable;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class LoginRepository {
 
     private ApiService apiService;
-    private TokenHolder tokenHolder;
-    private LoginResponse response;
+    private MutableLiveData<LoginResponse> response;
     private static final String TAG = "LoginRepository";
 
     public LoginRepository(Application application) {
-        apiService = ApiClient.getApiService(application);
-        tokenHolder = new TokenHolder(application);
+        apiService = ApiServiceProvider.getApiService(application);
     }
 
-    public Completable login(String username, String password) {
-
-
-        RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"),username);
-        RequestBody passwordBody = RequestBody.create(MediaType.parse("text/plain"),password);
-        return apiService.login(usernameBody,passwordBody)
-                .doOnSuccess(loginResponse -> response = loginResponse)
-                .ignoreElement();
-
-
-//        return apiService.login(username, password).enqueue(new Callback<LoginResponse>() {
-//            @Override
-//            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-//                Log.d(TAG, "onResponse: "+ response.body().toString());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<LoginResponse> call, Throwable t) {
-//
-//            }
-//        });
+    public Single<LoginResponse> login(String username, String password) {
+        return apiService.login(username,password);
 
     }
 

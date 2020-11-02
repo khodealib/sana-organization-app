@@ -40,25 +40,6 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://asena-api.asenadev.com/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
-
-        apiService.login("1234516789","1234516789").enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (response.body() != null) {
-                    Log.i(TAG, "onResponse: " + response.body().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Log.i(TAG, "onFailure: " + t.getMessage());
-            }
-        });
 
 
         navView =findViewById(R.id.nav_menu);
