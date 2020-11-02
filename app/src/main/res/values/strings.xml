@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Sana</string>
+    <string name="title_login">ورود به حساب کاربری</string>
+    <string name="notice_login">برای ورود به حساب کاربری اطلاعات خود را به دقت وارد کنید</string>
+    <string name="username_hint_login">نام کاربری</string>
+    <string name="password_hint_login">رمز عبور</string>
+    <string name="enter_to_account">ورود به حساب</string>
+    <string name="nav_header_title">کاربر 1</string>
+    <string name="nav_header_subtitle">خوش آمدید</string>
+    <string name="mi_dashboard">پیشخوان</string>
+    <string name="mi_present">ورود و خروج ارباب رجوع</string>
+    <string name="mi_customer_list">لیست ارباب رجوع</string>
+    <string name="mi_profile_page">صفحه شخصی</string>
+    <string name="exit">خروج</string>
+</resources>

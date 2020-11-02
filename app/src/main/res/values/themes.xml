@@ -1,0 +1,38 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="ThemeSana" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryColor</item>
+        <item name="fontFamily">@font/font_regular</item>
+    </style>
+
+    <style name="hintStyle" parent="TextAppearance.Design.Hint">
+        <item name="android:fontFamily">@font/font_medium</item>
+        <item name="android:textColor">#A6A6A6</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorSplash</item>
+        <item name="colorAccent">@color/primaryColor</item>
+        <item name="fontFamily">@font/font_regular</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="fontFamily">@font/font_regular</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+    </style>
+
+
+</resources>
