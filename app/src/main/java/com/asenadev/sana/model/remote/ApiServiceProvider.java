@@ -18,29 +18,29 @@ public class ApiServiceProvider {
 
     public static ApiService getApiService(Application application) {
         if (apiService==null) {
-//            OkHttpClient client = new OkHttpClient.Builder()
-//                    .addInterceptor(chain -> {
-//                        Request oldRequest = chain.request();
-//                        if (oldRequest.url().encodedPath().contains("login") && oldRequest.method().equals("post"))
-//                            return chain.proceed(oldRequest);
-//
-//
-//                        HttpUrl requestUrl = oldRequest.url();
-//
-//                        String token = new TokenHolder(application).getUserLoginToken();
-//
-//                        Request newRequest = oldRequest.newBuilder()
-//                                .url(requestUrl)
-//                                .addHeader("Authorization", "Bearer " + token)
-//                                .build();
-//
-//                        return chain.proceed(newRequest);
-//                    }).build();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(chain -> {
+                        Request oldRequest = chain.request();
+                        if (oldRequest.url().encodedPath().contains("login") && oldRequest.method().equals("post"))
+                            return chain.proceed(oldRequest);
+
+
+                        HttpUrl requestUrl = oldRequest.url();
+
+                        String token = new TokenHolder(application).getUserLoginToken();
+
+                        Request newRequest = oldRequest.newBuilder()
+                                .url(requestUrl)
+                                .addHeader("Authorization", "Bearer " + token)
+                                .build();
+
+                        return chain.proceed(newRequest);
+                    }).build();
 
             Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                    .client(client)
+                    .client(client)
                     .build();
 
             apiService = retrofit.create(ApiService.class);

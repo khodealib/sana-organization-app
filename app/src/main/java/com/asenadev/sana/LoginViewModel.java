@@ -1,8 +1,6 @@
 package com.asenadev.sana;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,12 +8,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-
 import com.asenadev.sana.model.LoginRepository;
 import com.asenadev.sana.model.TokenHolder;
 import com.asenadev.sana.model.login.LoginResponse;
-
-import io.reactivex.CompletableObserver;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,7 +22,7 @@ public class LoginViewModel extends AndroidViewModel {
     private LoginRepository repository;
     private Disposable disposable;
     private Application application;
-    private boolean isSuccessLogin;
+    private MutableLiveData<Boolean> isSuccessLogin=new MutableLiveData<Boolean>();
     private TokenHolder tokenHolder;
     private LoginResponse response;
     private static final String TAG = "LoginViewModel";
@@ -39,11 +34,11 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
 
-    public boolean login(String userName, String password) {
+    public LiveData<Boolean> login(String userName, String password) {
         repository.login(userName, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSuccess(loginResponse -> isSuccessLogin=true)
+                .doOnSuccess(loginResponse -> isSuccessLogin.postValue(Boolean.TRUE))
                 .subscribe(new SingleObserver<LoginResponse>() {
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -60,7 +55,7 @@ public class LoginViewModel extends AndroidViewModel {
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                         Log.i(TAG, "onError: error");
-                        isSuccessLogin =false;
+                        isSuccessLogin.postValue(Boolean.FALSE);
                     }
                 });
 

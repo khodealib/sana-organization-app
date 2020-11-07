@@ -89,7 +89,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.kusu.loadingbutton.LoadingButton
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="60dp"
