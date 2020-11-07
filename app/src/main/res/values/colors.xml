@@ -10,14 +10,15 @@
     <color name="primaryColor">#f2f2f2</color>
     <color name="primaryLightColor">#ffffff</color>
     <color name="primaryDarkColor">#bfbfbf</color>
-    <color name="primaryTextColor">#000000</color>
+    <color name="textPrimaryColor">#000000</color>
 
 
     <color name="colorPrimary">@color/primaryColor</color>
     <color name="colorPrimaryDark">@color/primaryDarkColor</color>
     <color name="colorPrimaryLight">@color/primaryLightColor</color>
-    <color name="colorPrimaryText">@color/primaryTextColor</color>
+    <color name="colorPrimaryText">@color/textPrimaryColor</color>
     <color name="blueLight">#3A88E6</color>
+    <color name="colorAccent">@color/colorPrimary</color>
     <color name="black">#121212</color>
     <color name="white">#fff</color>
     <color name="gray400">#bdbdbd</color>
