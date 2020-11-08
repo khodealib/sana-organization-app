@@ -1,28 +1,19 @@
-package com.asenadev.sana;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+package com.asenadev.sana.ui;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.asenadev.sana.R;
-import com.asenadev.sana.model.login.LoginResponse;
-import com.asenadev.sana.model.remote.ApiService;
 import com.asenadev.sana.utils.CustomTypefaceSpan;
 import com.google.android.material.navigation.NavigationView;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeActivity extends AppCompatActivity {
 

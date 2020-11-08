@@ -1,10 +1,12 @@
-package com.asenadev.sana;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.asenadev.sana.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.asenadev.sana.R;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -15,7 +17,7 @@ public class SplashScreen extends AppCompatActivity {
 
         // timer
         new Handler().postDelayed(() -> {
-            Intent intent=new Intent(SplashScreen.this,LoginActivity.class);
+            Intent intent=new Intent(SplashScreen.this, LoginActivity.class);
             startActivity(intent);
             finish();
         },3000);

@@ -1,7 +1,8 @@
 package com.asenadev.sana.model.employee;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Data{
 
@@ -12,7 +13,7 @@ public class Data{
 	private Links links;
 
 	@SerializedName("employees")
-	private List<EmployeesItem> employees;
+	private List<Employee> employees;
 
 	public Meta getMeta(){
 		return meta;
@@ -22,7 +23,7 @@ public class Data{
 		return links;
 	}
 
-	public List<EmployeesItem> getEmployees(){
+	public List<Employee> getEmployees(){
 		return employees;
 	}
 }

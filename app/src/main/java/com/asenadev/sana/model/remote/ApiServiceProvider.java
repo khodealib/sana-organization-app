@@ -1,9 +1,5 @@
 package com.asenadev.sana.model.remote;
 
-import android.app.Application;
-
-import com.asenadev.sana.model.TokenHolder;
-
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -14,10 +10,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiServiceProvider {
 
     private static ApiService apiService;
-    private static String BASE_URL="https://asena-api.asenadev.com/api/";
+    private static Retrofit retrofitAuth, retrofitNoAuth;
+    private static String BASE_URL = "https://asena-api.asenadev.com/api/";
 
-    public static ApiService getApiService(Application application) {
-        if (apiService==null) {
+    public static Retrofit getRetrofitAuth(String token) {
+        if (retrofitAuth == null) {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {
                         Request oldRequest = chain.request();
@@ -27,7 +24,6 @@ public class ApiServiceProvider {
 
                         HttpUrl requestUrl = oldRequest.url();
 
-                        String token = new TokenHolder(application).getUserLoginToken();
 
                         Request newRequest = oldRequest.newBuilder()
                                 .url(requestUrl)
@@ -37,14 +33,47 @@ public class ApiServiceProvider {
                         return chain.proceed(newRequest);
                     }).build();
 
-            Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
+            retrofitAuth = new Retrofit.Builder().baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(client)
                     .build();
 
-            apiService = retrofit.create(ApiService.class);
         }
-        return apiService;
+        return retrofitAuth;
+    }
+
+    public static Retrofit getRetrofitNoAuth() {
+        if (retrofitNoAuth == null) {
+
+            retrofitAuth = new Retrofit.Builder().baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
+
+        }
+        return retrofitNoAuth;
+    }
+
+    //checks if an authenticated retrofit already exists and re-uses it, else a new instance is created
+    public static <S> S createService(Class<S> serviceClass, String token) {
+        if (retrofitAuth == null)
+            return getRetrofitAuth(token).create(serviceClass);
+        else
+            return retrofitAuth.create(serviceClass);
+    }
+
+    //checks if a public retrofit already exists and re-uses it, else a new instance is created
+    public static <S> S createService(Class<S> serviceClass) {
+        if (retrofitNoAuth == null)
+            return getRetrofitNoAuth().create(serviceClass);
+        else
+            return retrofitNoAuth.create(serviceClass);
+    }
+
+    //call this when the user logs out of the app or if the auth token is refreshed from backend. This resets all retrofit instances to null
+    public static void clearRetrofit() {
+        retrofitAuth = null;
+        retrofitNoAuth = null;
     }
 }

@@ -1,27 +1,28 @@
-package com.asenadev.sana.model.employee;
+package com.asenadev.sana.model.customer.referral;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class Response{
+import java.util.List;
+
+public class CustomerReferralResponse{
 
 	@SerializedName("code")
 	private int code;
 
 	@SerializedName("data")
-	private Data data;
+	private List<Object> data;
 
 	@SerializedName("messages")
 	private List<String> messages;
 
 	@SerializedName("errors")
-	private List<String> errors;
+	private List<Object> errors;
 
 	public int getCode(){
 		return code;
 	}
 
-	public Data getData(){
+	public List<Object> getData(){
 		return data;
 	}
 
@@ -29,7 +30,7 @@ public class Response{
 		return messages;
 	}
 
-	public List<String> getErrors(){
+	public List<Object> getErrors(){
 		return errors;
 	}
 }

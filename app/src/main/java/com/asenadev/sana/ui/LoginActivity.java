@@ -1,4 +1,4 @@
-package com.asenadev.sana;
+package com.asenadev.sana.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.asenadev.sana.LoginViewModel;
+import com.asenadev.sana.R;
 import com.asenadev.sana.model.TokenHolder;
 import com.asenadev.sana.model.ViewModelFactory;
 import com.asenadev.sana.utils.NetworkUtil;

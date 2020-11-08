@@ -2,7 +2,7 @@ package com.asenadev.sana.model.employee;
 
 import com.google.gson.annotations.SerializedName;
 
-public class EmployeesItem{
+public class Employee {
 
 	@SerializedName("post")
 	private String post;
