@@ -47,11 +47,12 @@
             android:textColor="#A6A6A6"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username_login"
+            android:id="@+id/etl_dashboard_referral_national_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="12dp"
+            app:counterMaxLength="10"
             android:layout_marginStart="12dp"
             android:layout_marginTop="32dp"
             android:hint="@string/username_hint_login"
@@ -89,7 +90,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.kusu.loadingbutton.LoadingButton
+        <com.kusu.library.LoadingButton
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="60dp"

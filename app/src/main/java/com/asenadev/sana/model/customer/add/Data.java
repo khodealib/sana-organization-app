@@ -1,22 +1,10 @@
-package com.asenadev.sana.model.customer;
+package com.asenadev.sana.model.customer.add;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Customer{
-
-	@SerializedName("code")
-	private int code;
-
-	@SerializedName("data")
-	private Data data;
-
-	@SerializedName("messages")
-	private List<Object> messages;
-
-	@SerializedName("errors")
-	private List<Object> errors;
+public class Data{
 
 	@SerializedName("national_code")
 	private String nationalCode;
@@ -25,7 +13,7 @@ public class Customer{
 	private String fatherName;
 
 	@SerializedName("referrals")
-	private List<Object> referrals;
+	private List<Referral> referrals;
 
 	@SerializedName("mobile")
 	private String mobile;
@@ -40,23 +28,7 @@ public class Customer{
 	private String firstName;
 
 	@SerializedName("picture")
-	private String picture;
-
-	public int getCode(){
-		return code;
-	}
-
-	public Data getData(){
-		return data;
-	}
-
-	public List<Object> getMessages(){
-		return messages;
-	}
-
-	public List<Object> getErrors(){
-		return errors;
-	}
+	private Object picture;
 
 	public String getNationalCode(){
 		return nationalCode;
@@ -66,7 +38,7 @@ public class Customer{
 		return fatherName;
 	}
 
-	public List<Object> getReferrals(){
+	public List<Referral> getReferrals(){
 		return referrals;
 	}
 
@@ -86,7 +58,21 @@ public class Customer{
 		return firstName;
 	}
 
-	public String getPicture(){
+	public Object getPicture(){
 		return picture;
+	}
+
+	@Override
+	public String toString() {
+		return "Data{" +
+				"nationalCode='" + nationalCode + '\'' +
+				", fatherName='" + fatherName + '\'' +
+				", referrals=" + referrals +
+				", mobile='" + mobile + '\'' +
+				", lastName='" + lastName + '\'' +
+				", id='" + id + '\'' +
+				", firstName='" + firstName + '\'' +
+				", picture=" + picture +
+				'}';
 	}
 }

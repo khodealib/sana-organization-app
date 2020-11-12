@@ -1,4 +1,4 @@
-package com.asenadev.sana.model.customer;
+package com.asenadev.sana.model.customer.get;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -3,17 +3,20 @@ package com.asenadev.sana.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.asenadev.sana.LoginViewModel;
 import com.asenadev.sana.R;
 import com.asenadev.sana.model.TokenHolder;
-import com.asenadev.sana.model.ViewModelFactory;
+import com.asenadev.sana.model.remote.ApiService;
+import com.asenadev.sana.model.remote.ApiServiceProvider;
+import com.asenadev.sana.model.viewmodel.LoginViewModel;
+import com.asenadev.sana.model.viewmodel.ViewModelFactory;
 import com.asenadev.sana.utils.NetworkUtil;
 import com.google.android.material.textfield.TextInputEditText;
-import com.kusu.loadingbutton.LoadingButton;
+import com.kusu.library.LoadingButton;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,11 +33,23 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginViewModel = new ViewModelProvider(this, new ViewModelFactory(getApplication(), new TokenHolder(this))).get(LoginViewModel.class);
+        TokenHolder tokenHolder = new TokenHolder(this);
+
+        if (!tokenHolder.getUserLoginToken().equals("")) {
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            loginViewModel = new ViewModelProvider(this, new ViewModelFactory(
+                    getApplication(),
+                    tokenHolder,
+                    ApiServiceProvider.createService(ApiService.class))).get(LoginViewModel.class);
 
 
+        }
 
         initViews();
+
 
     }
 
@@ -44,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.btn_login);
 
         loginBtn.setOnClickListener(view -> {
-            if (NetworkUtil.checkNetworkState(getApplicationContext())){
+            if (NetworkUtil.checkNetworkState(getApplicationContext())) {
                 if (userNameEt.getText().toString().equals("")) {
                     userNameEt.setError("نام کاربری را وارد کنید");
                 }
@@ -54,18 +69,18 @@ public class LoginActivity extends AppCompatActivity {
                 if (!userNameEt.getText().toString().equals("") && !passwordEt.getText().toString().equals("")) {
                     Log.i(TAG, "initViews: " + userNameEt.getText().toString() + " " + passwordEt.getText());
                     loginBtn.showLoading();
-                    loginViewModel.login(userNameEt.getText().toString(),passwordEt.getText().toString())
-                            .observe(this,isSuccess -> {
+                    loginViewModel.login(userNameEt.getText().toString(), passwordEt.getText().toString())
+                            .observe(this, isSuccess -> {
                                 if (isSuccess) {
                                     loginBtn.hideLoading();
-                                    Intent intent= new Intent(LoginActivity.this, HomeActivity.class);
+                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }
                             });
 
                 }
-            }
+            } else Toast.makeText(this, "اینترنت متصل نیست", Toast.LENGTH_SHORT).show();
         });
 
     }

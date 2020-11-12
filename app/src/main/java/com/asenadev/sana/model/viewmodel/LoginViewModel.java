@@ -1,4 +1,4 @@
-package com.asenadev.sana;
+package com.asenadev.sana.model.viewmodel;
 
 import android.app.Application;
 import android.util.Log;
@@ -8,9 +8,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.asenadev.sana.model.LoginRepository;
 import com.asenadev.sana.model.TokenHolder;
 import com.asenadev.sana.model.login.LoginResponse;
+import com.asenadev.sana.model.remote.ApiService;
+import com.asenadev.sana.model.repository.LoginRepository;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,16 +22,17 @@ public class LoginViewModel extends AndroidViewModel {
 
     private LoginRepository repository;
     private Disposable disposable;
-    private Application application;
-    private MutableLiveData<Boolean> isSuccessLogin=new MutableLiveData<Boolean>();
+
+    private MutableLiveData<Boolean> isSuccessLogin;
     private TokenHolder tokenHolder;
     private LoginResponse response;
     private static final String TAG = "LoginViewModel";
 
-    public LoginViewModel(@NonNull Application application, TokenHolder tokenHolder) {
+    public LoginViewModel(@NonNull Application application, TokenHolder tokenHolder, ApiService apiService) {
         super(application);
         this.tokenHolder = tokenHolder;
-        repository = new LoginRepository(application);
+        repository = new LoginRepository(apiService);
+        isSuccessLogin = new MutableLiveData<>();
     }
 
 

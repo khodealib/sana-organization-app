@@ -1,6 +1,5 @@
 package com.asenadev.sana.model.remote;
 
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
@@ -18,15 +17,8 @@ public class ApiServiceProvider {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {
                         Request oldRequest = chain.request();
-                        if (oldRequest.url().encodedPath().contains("login") && oldRequest.method().equals("post"))
-                            return chain.proceed(oldRequest);
-
-
-                        HttpUrl requestUrl = oldRequest.url();
-
 
                         Request newRequest = oldRequest.newBuilder()
-                                .url(requestUrl)
                                 .addHeader("Authorization", "Bearer " + token)
                                 .build();
 
@@ -46,7 +38,7 @@ public class ApiServiceProvider {
     public static Retrofit getRetrofitNoAuth() {
         if (retrofitNoAuth == null) {
 
-            retrofitAuth = new Retrofit.Builder().baseUrl(BASE_URL)
+            retrofitNoAuth = new Retrofit.Builder().baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();

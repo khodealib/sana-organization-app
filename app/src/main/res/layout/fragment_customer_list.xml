@@ -31,17 +31,23 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="حاضر در سازمان"
             android:layout_weight="1"
+            android:letterSpacing="0"
+            android:textSize="10sp"
+            android:text="خارج شده"
 
             android:textColor="#A9121212" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:text="حاضر در سازمان"
             android:layout_weight="1"
-            android:text="خارج شده"
-            android:textColor="#A9121212" />
+            android:textColor="#A9121212"
+             />
+
+
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -76,15 +82,15 @@
         android:backgroundTint="@color/black"
         app:layout_constraintTop_toTopOf="@+id/etl_customer_national_search" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etl_customer_national_search" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/etl_customer_national_search" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

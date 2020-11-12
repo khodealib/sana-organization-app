@@ -1,7 +1,10 @@
 package com.asenadev.sana.model.remote;
 
-import com.asenadev.sana.model.customer.Data;
-import com.asenadev.sana.model.customer.referral.CustomerReferralResponse;
+import com.asenadev.sana.model.customer.CustomerReferralResponse;
+import com.asenadev.sana.model.customer.add.CustomerAddResponse;
+import com.asenadev.sana.model.customer.exit.SetExitCustomerResponse;
+import com.asenadev.sana.model.customer.get.CustomerGetInfoResponse;
+import com.asenadev.sana.model.customer.referralcompleted.CompleteReferralResponse;
 import com.asenadev.sana.model.employee.EmployeeResponse;
 import com.asenadev.sana.model.login.LoginResponse;
 import com.asenadev.sana.model.profile.Profile;
@@ -13,6 +16,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiService {
 
@@ -25,16 +29,17 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("customer/get-info")
-    Single<Data> getCustomer(@Field("national_id") String nationalID);
+    Single<CustomerGetInfoResponse> getCustomer(@Field("national_id") String nationalID);
 
     @FormUrlEncoded
     @POST("customer/add")
-    Single<Data> addCustomer(
-            @Field("national_code") String nationalID,
+    Single<CustomerAddResponse> addCustomer(
+
             @Field("first_name") String firstName,
             @Field("last_name") String lastName,
             @Field("father_name") String fatherName,
-            @Field("mobile_number") String mobileNumber
+            @Field("mobile_number") String mobileNumber,
+            @Field("national_code") String nationalID
     );
 
 
@@ -57,5 +62,11 @@ public interface ApiService {
             @Field("profile_pic") MultipartBody profilePic
     );
 
+    @FormUrlEncoded
+    @POST("complete-reference")
+    Single<CompleteReferralResponse> completeReferral(@Field("reference_id") String referenceId);
 
+
+    @GET("customer/{user_id}/set-departure")
+    Single<SetExitCustomerResponse> setExit(@Path("user_id") String userId);
 }

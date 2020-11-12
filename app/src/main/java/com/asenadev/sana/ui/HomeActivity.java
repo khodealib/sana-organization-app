@@ -1,24 +1,26 @@
 package com.asenadev.sana.ui;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SubMenu;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.asenadev.sana.R;
-import com.asenadev.sana.utils.CustomTypefaceSpan;
+import com.asenadev.sana.model.TokenHolder;
 import com.google.android.material.navigation.NavigationView;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDialogCallBack {
 
     private NavigationView navView;
     private static final String TAG = "HomeActivity";
+    private DrawerLayout drawerLayout;
+
+    private View drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,37 +28,81 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = findViewById(R.id.toolbar_home);
-        setSupportActionBar(toolbar);
 
-
-
-
-
-        navView =findViewById(R.id.nav_menu);
-        Menu m = navView.getMenu();
-        for (int i=0;i<m.size();i++) {
-            MenuItem mi = m.getItem(i);
-
-            //for aapplying a font to subMenu ...
-            SubMenu subMenu = mi.getSubMenu();
-            if (subMenu!=null && subMenu.size() >0 ) {
-                for (int j=0; j <subMenu.size();j++) {
-                    MenuItem subMenuItem = subMenu.getItem(j);
-                    applyFontToMenuItem(subMenuItem);
-                }
-            }
-
-            //the method we have create in activity
-            applyFontToMenuItem(mi);
-        }
+        initViews();
     }
 
-    private void applyFontToMenuItem(MenuItem mi) {
-        Typeface font = Typeface.createFromAsset(getAssets(), "font_regular.ttf");
-        SpannableString mNewTitle = new SpannableString(mi.getTitle());
-        mNewTitle.setSpan(new CustomTypefaceSpan("" , font), 0 , mNewTitle.length(),  Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        //mNewTitle.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, mNewTitle.length(), 0); Use this if you want to center the items
-        mi.setTitle(mNewTitle);
+    private void initViews() {
+        navView = findViewById(R.id.nav_menu);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        drawerToggle = findViewById(R.id.iv_appBar_drawer_toggle);
+
+
+        drawerToggle.setOnClickListener(view -> {
+            drawerLayout.openDrawer(GravityCompat.START, true);
+        });
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.frame_container_home, new DashboardFragment(), null);
+        transaction.commit();
+
+        navView.setNavigationItemSelectedListener(item -> {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_container_home);
+            int itemId = item.getItemId();
+            if (itemId == R.id.mi_customer_list) {
+                if (fragment != null) {
+
+                    drawerLayout.closeDrawer(GravityCompat.START, true);
+
+                    FragmentTransaction customerTransaction = getSupportFragmentManager().beginTransaction();
+                    customerTransaction.replace(R.id.frame_container_home, new CustomerFragment());
+                    customerTransaction.addToBackStack(null);
+                    customerTransaction.commit();
+
+
+                }
+            } else if (itemId == R.id.mi_profile_page) {
+                if (fragment != null) {
+                    drawerLayout.closeDrawer(GravityCompat.START, true);
+                    transaction.replace(R.id.frame_container_home, new ProfileFragment());
+
+                    FragmentTransaction profileTransaction = getSupportFragmentManager().beginTransaction();
+                    profileTransaction.replace(R.id.frame_container_home, new ProfileFragment());
+                    profileTransaction.addToBackStack(null);
+                    profileTransaction.commit();
+
+                }
+            } else if (itemId == R.id.mi_exit) {// TODO
+                ExitDialog exitDialog = new ExitDialog(this);
+                exitDialog.show(getSupportFragmentManager(),null);
+            } else if (itemId == R.id.mi_present) {
+                if (fragment != null) {
+                    drawerLayout.closeDrawer(GravityCompat.START, true);
+                    FragmentTransaction presentTransaction = getSupportFragmentManager().beginTransaction();
+                    presentTransaction.replace(R.id.frame_container_home, new DashboardFragment());
+                    presentTransaction.addToBackStack(null);
+                    presentTransaction.commit();
+                }
+            } else if (itemId == R.id.mi_dashboard) {
+                drawerLayout.closeDrawer(GravityCompat.START, true);
+                FragmentTransaction dashboardTransaction = getSupportFragmentManager().beginTransaction();
+                dashboardTransaction.replace(R.id.frame_container_home, new DashboardFragment());
+                dashboardTransaction.addToBackStack(null);
+                dashboardTransaction.commit();
+            }
+                return false;
+        });
+    }
+
+
+    @Override
+    public void exitListener(boolean result) {
+        if (result) {
+            TokenHolder tokenHolder = new TokenHolder(this);
+            tokenHolder.saveUserLoginToken("");
+            finish();
+        }
     }
 }
