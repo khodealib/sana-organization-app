@@ -2,6 +2,8 @@ package com.asenadev.sana.model.remote;
 
 import com.asenadev.sana.model.customer.CustomerReferralResponse;
 import com.asenadev.sana.model.customer.add.CustomerAddResponse;
+import com.asenadev.sana.model.customer.arrival.departuelist.ArrivalDepartureResponse;
+import com.asenadev.sana.model.customer.arrival.submitexit.SubmitDepartureResponse;
 import com.asenadev.sana.model.customer.exit.SetExitCustomerResponse;
 import com.asenadev.sana.model.customer.get.CustomerGetInfoResponse;
 import com.asenadev.sana.model.customer.referralcompleted.CompleteReferralResponse;
@@ -17,6 +19,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -69,4 +72,25 @@ public interface ApiService {
 
     @GET("customer/{user_id}/set-departure")
     Single<SetExitCustomerResponse> setExit(@Path("user_id") String userId);
+
+    @GET("customer/arrival-departure-list")
+    Single<ArrivalDepartureResponse> getArrivalDepartureList(
+            @Query("national_code") String nationalCode,
+            @Query("present") int present,
+            @Query("page") int pageNumber);
+
+
+    @GET("customer/arrival-departure-list")
+    Single<ArrivalDepartureResponse> getArrivalDepartureList(
+            @Query("present") int present);
+
+
+    @GET("customer/arrival-departure-list")
+    Single<ArrivalDepartureResponse> getArrivalDepartureList(
+            @Query("national_code") String nationalCode,
+            @Query("present") int present);
+
+    @FormUrlEncoded
+    @GET("customer/submit-departure")
+    Single<SubmitDepartureResponse> submitDeparture(@Field("arrival_id") String arrivalId);
 }

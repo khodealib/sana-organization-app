@@ -37,7 +37,7 @@
                 android:id="@+id/etl_dashboard_referral_national_code"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
@@ -50,7 +50,9 @@
                     android:id="@+id/et_dashboard_referral_national_code"
                     android:layout_width="match_parent"
                     android:textColor="@color/black"
+                    android:maxLines="1"
                     android:layout_height="wrap_content" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.kusu.library.LoadingButton

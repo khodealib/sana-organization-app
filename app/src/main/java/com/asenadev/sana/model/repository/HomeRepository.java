@@ -2,6 +2,7 @@ package com.asenadev.sana.model.repository;
 
 import android.annotation.SuppressLint;
 
+import com.asenadev.sana.model.customer.arrival.departuelist.ArrivalsItem;
 import com.asenadev.sana.model.customer.get.Customer;
 import com.asenadev.sana.model.employee.Employee;
 import com.asenadev.sana.model.remote.ApiService;
@@ -12,9 +13,9 @@ import io.reactivex.Single;
 
 public class HomeRepository {
 
+    private static final String TAG = "HomeRepository";
     private ApiService apiService;
     private Single<Boolean> isExist;
-    private static final String TAG = "HomeRepository";
 
     public HomeRepository(ApiService apiService) {
 
@@ -47,7 +48,19 @@ public class HomeRepository {
         return apiService.completeReferral(referenceId).map(completeReferralResponse -> completeReferralResponse.getCode() == 200);
     }
 
-    public Single<Boolean> setExit(String userId){
-        return apiService.setExit(userId).map(setExitCustomerResponse -> setExitCustomerResponse.getCode()==200);
+    public Single<Boolean> setExit(String userId) {
+        return apiService.setExit(userId).map(setExitCustomerResponse -> setExitCustomerResponse.getCode() == 200);
+    }
+
+    public Single<List<ArrivalsItem>> getArrivalDepartureList(int present) {
+        return apiService.getArrivalDepartureList(present).map(arrivalDepartureResponse -> arrivalDepartureResponse.getData().getArrivals());
+    }
+
+    public Single<List<ArrivalsItem>> getArrivalDepartureListByNationalCode(String nationalCode, int present) {
+        return apiService.getArrivalDepartureList(nationalCode, present).map(arrivalDepartureResponse -> arrivalDepartureResponse.getData().getArrivals());
+    }
+
+    public Single<Boolean> submitCustomerDeparture(String arrivalId) {
+        return apiService.submitDeparture(arrivalId).map(submitDepartureResponse -> submitDepartureResponse.getCode() == 200);
     }
 }

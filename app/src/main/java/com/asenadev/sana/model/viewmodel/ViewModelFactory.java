@@ -29,9 +29,11 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
-            return (T) new LoginViewModel(application, tokenHolder,apiService);
+            return (T) new LoginViewModel(application, tokenHolder, apiService);
         } else if (modelClass.isAssignableFrom(DashboardViewModel.class)) {
-            return (T) new DashboardViewModel(application, tokenHolder,apiService);
+            return (T) new DashboardViewModel(application, tokenHolder, apiService);
+        } else if (modelClass.isAssignableFrom(CustomerViewModel.class)) {
+            return (T) new CustomerViewModel(application, apiService);
         }
 
         return null;
