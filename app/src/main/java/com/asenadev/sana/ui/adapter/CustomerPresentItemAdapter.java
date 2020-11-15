@@ -46,8 +46,9 @@ public class CustomerPresentItemAdapter extends RecyclerView.Adapter<CustomerPre
         notifyDataSetChanged();
     }
 
-    public void search(String toString) {
-
+    public void clear() {
+        arrivalsItems.clear();
+        notifyDataSetChanged();
     }
 
     public class CustomerPresentItemViewHolder extends RecyclerView.ViewHolder {

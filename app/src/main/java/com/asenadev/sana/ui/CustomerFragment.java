@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.asenadev.sana.R;
 import com.asenadev.sana.model.TokenHolder;
@@ -37,6 +38,7 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
     private CustomerExitedItemAdapter exitedItemAdapter;
     private CustomerPresentItemAdapter presentItemAdapter;
     private LoadingButton searchBtn;
+    private SwipeRefreshLayout swipeContainer;
 
     @Nullable
     @Override
@@ -58,9 +60,11 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
         toggleGroup = view.findViewById(R.id.toggleButton);
         nationalCode = view.findViewById(R.id.et_customer_national_search);
         searchBtn = view.findViewById(R.id.btn_customer_search);
+        swipeContainer = view.findViewById(R.id.srl_customer_refresh);
 
         recyclerViewCustomerList = view.findViewById(R.id.rv_customer_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        recyclerViewCustomerList.setLayoutManager(linearLayoutManager);
 
         customerViewModel.getPresentList().observe(getActivity(), arrivalsItems -> {
             presentItemAdapter = new CustomerPresentItemAdapter(arrivalsItems, this);
@@ -74,12 +78,11 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
             if (checkedId == R.id.ltb_customer_present) {
                 customerState = CustomerState.PRESENT;
                 recyclerViewCustomerList.setAdapter(presentItemAdapter);
-                recyclerViewCustomerList.setLayoutManager(linearLayoutManager);
 
             } else if (checkedId == R.id.ltb_customer_exited) {
                 customerState = CustomerState.EXITED;
                 recyclerViewCustomerList.setAdapter(exitedItemAdapter);
-                recyclerViewCustomerList.setLayoutManager(linearLayoutManager);
+
             }
         });
 
@@ -93,13 +96,27 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
                         .observe(getActivity(), arrivalsItems -> exitedItemAdapter.addAll(arrivalsItems));
             }
         });
+
+        swipeContainer.setOnRefreshListener(() -> {
+            customerViewModel.getPresentList().observe(getActivity(), arrivalsItems -> {
+                presentItemAdapter.clear();
+                presentItemAdapter.addAllItems(arrivalsItems);
+            });
+
+            customerViewModel.getExitedList().observe(getActivity(), arrivalsItems -> {
+                exitedItemAdapter.clear();
+                exitedItemAdapter.addAll(arrivalsItems);
+            });
+
+            swipeContainer.setRefreshing(false);
+        });
     }
 
     @Override
     public void setExitButtonClickListener(ArrivalsItem arrivalsItem) {
         customerViewModel.setDeparture(arrivalsItem.getId())
                 .observe(getActivity(), aBoolean -> {
-                    if (aBoolean)
+                    if (!aBoolean)
                         Toast.makeText(getContext(), "آخرین ارجاع تکمیل نشده است!", Toast.LENGTH_SHORT).show();
                     else {
                         Toast.makeText(getContext(), "خروج ثبت شد.", Toast.LENGTH_SHORT).show();
@@ -108,4 +125,5 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
                     }
                 });
     }
+
 }

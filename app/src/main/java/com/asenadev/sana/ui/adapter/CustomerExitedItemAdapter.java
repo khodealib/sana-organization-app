@@ -45,6 +45,11 @@ public class CustomerExitedItemAdapter extends RecyclerView.Adapter<CustomerExit
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        arrivalsItems.clear();
+        notifyDataSetChanged();
+    }
+
     public class CustomerExitedItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView fullNameTv;
