@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.btn_login);
 
         loginBtn.setOnClickListener(view -> {
+            // TODO internet check
             if (NetworkUtil.checkNetworkState(getApplicationContext())) {
                 if (userNameEt.getText().toString().equals("")) {
                     userNameEt.setError("نام کاربری را وارد کنید");

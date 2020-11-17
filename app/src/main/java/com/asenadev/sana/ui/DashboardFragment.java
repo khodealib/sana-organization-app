@@ -186,9 +186,9 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
                             profileCustomerView.setVisibility(View.GONE);
                             setExitedBtn.setVisibility(View.GONE);
 
-                            Toast.makeText(getContext(), "کاربر خارج شد", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "کاربر خارج شد.", Toast.LENGTH_SHORT).show();
                         } else
-                            Toast.makeText(getContext(), "آخرین ارجاع کامل نشده است", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "آخرین ارجاع کامل نشده است!", Toast.LENGTH_SHORT).show();
                     });
         });
     }

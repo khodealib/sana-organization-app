@@ -18,22 +18,21 @@ import java.util.List;
 public class CustomerReferralItemAdapter extends RecyclerView.Adapter<CustomerReferralItemAdapter.CustomerItemViewHolder> {
 
 
+    private static final String TAG = "CustomerReferralItemAda";
     private List<ReferralItem> referrals;
     private ReferralItemCallBack callBack;
-    private static final String TAG = "CustomerReferralItemAda";
 
-    public CustomerReferralItemAdapter(List<ReferralItem> referrals , ReferralItemCallBack callBack){
+    public CustomerReferralItemAdapter(List<ReferralItem> referrals, ReferralItemCallBack callBack) {
         this.referrals = referrals;
         this.callBack = callBack;
     }
-
 
 
     @NonNull
     @Override
     public CustomerItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new CustomerItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.refferral_list,parent,false
+                R.layout.refferral_list, parent, false
         ));
     }
 
@@ -51,16 +50,20 @@ public class CustomerReferralItemAdapter extends RecyclerView.Adapter<CustomerRe
 
     public void updateStatus(List<ReferralItem> referralItems) {
 //        referrals.clear();
-        Log.i(TAG, "updateStatus: "+ referralItems);
+        Log.i(TAG, "updateStatus: " + referralItems);
 //        referrals.addAll(referralItems);
 
 
         this.referrals = referralItems;
-        Log.i(TAG, "updateStatus: "+ referrals.toString());
+        Log.i(TAG, "updateStatus: " + referrals.toString());
         notifyDataSetChanged();
     }
 
-    public class CustomerItemViewHolder extends RecyclerView.ViewHolder{
+    public interface ReferralItemCallBack {
+        void onClickOnComplete(ReferralItem referralItem);
+    }
+
+    public class CustomerItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView referralToTv;
         private TextView referralDateTv;
@@ -69,15 +72,16 @@ public class CustomerReferralItemAdapter extends RecyclerView.Adapter<CustomerRe
 
         public CustomerItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            referralToTv=itemView.findViewById(R.id.tv_referralItem_refersTo);
-            referralDateTv=itemView.findViewById(R.id.tv_referralItem_date);
-            referralStatusTv=itemView.findViewById(R.id.tv_referralItem_status);
-            completeBtn=itemView.findViewById(R.id.btn_referralItem_complete);
+            referralToTv = itemView.findViewById(R.id.tv_referralItem_refersTo);
+            referralDateTv = itemView.findViewById(R.id.tv_referralItem_date);
+            referralStatusTv = itemView.findViewById(R.id.tv_referralItem_status);
+            completeBtn = itemView.findViewById(R.id.btn_referralItem_complete);
             completeBtn.setVisibility(View.GONE);
 
 
         }
-        public void bind(ReferralItem referralItem){
+
+        public void bind(ReferralItem referralItem) {
             referralToTv.setText(referralItem.getEmployeeName());
             referralDateTv.setText(referralItem.getReferred());
             referralStatusTv.setText(referralItem.getStatusLabel());
@@ -93,9 +97,5 @@ public class CustomerReferralItemAdapter extends RecyclerView.Adapter<CustomerRe
             });
 
         }
-    }
-
-    public interface ReferralItemCallBack{
-        void onClickOnComplete(ReferralItem referralItem);
     }
 }

@@ -18,9 +18,12 @@ public class CustomerExitedItemAdapter extends RecyclerView.Adapter<CustomerExit
 
     private List<ArrivalsItem> arrivalsItems;
 
+    private static final String TAG = "CustomerItemAdapter";
+
     public CustomerExitedItemAdapter(List<ArrivalsItem> arrivalsItems) {
 
         this.arrivalsItems = arrivalsItems;
+
     }
 
     @NonNull
@@ -40,14 +43,16 @@ public class CustomerExitedItemAdapter extends RecyclerView.Adapter<CustomerExit
         return arrivalsItems.size();
     }
 
-    public void addAll(List<ArrivalsItem> arrivalsItems) {
+    public void setArrivalsItems(List<ArrivalsItem> arrivalsItems) {
+
         this.arrivalsItems = arrivalsItems;
         notifyDataSetChanged();
     }
 
-    public void clear() {
-        arrivalsItems.clear();
-        notifyDataSetChanged();
+    @Override
+    public int getItemViewType(int position) {
+
+        return super.getItemViewType(position);
     }
 
     public class CustomerExitedItemViewHolder extends RecyclerView.ViewHolder {
@@ -73,4 +78,5 @@ public class CustomerExitedItemAdapter extends RecyclerView.Adapter<CustomerExit
             exitedDateTv.setText(arrivalsItem.getDepartureTime());
         }
     }
+
 }

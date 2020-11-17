@@ -90,7 +90,8 @@ public interface ApiService {
             @Query("national_code") String nationalCode,
             @Query("present") int present);
 
+
     @FormUrlEncoded
-    @GET("customer/submit-departure")
+    @POST("customer/submit-departure")
     Single<SubmitDepartureResponse> submitDeparture(@Field("arrival_id") String arrivalId);
 }

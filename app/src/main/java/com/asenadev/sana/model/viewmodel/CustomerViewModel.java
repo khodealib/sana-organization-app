@@ -1,6 +1,7 @@
 package com.asenadev.sana.model.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -22,13 +23,13 @@ import io.reactivex.schedulers.Schedulers;
 public class CustomerViewModel extends AndroidViewModel {
 
 
-
-    private MutableLiveData<List<ArrivalsItem>> presentList=new MutableLiveData<>();
-    private MutableLiveData<List<ArrivalsItem>> exitedList=new MutableLiveData<>();
-    private MutableLiveData<List<ArrivalsItem>> arrivalListByNationalCode=new MutableLiveData<>();
-    private MutableLiveData<Boolean> isDeparture=new MutableLiveData<>();
+    private static final String TAG = "CustomerViewModel";
+    private MutableLiveData<List<ArrivalsItem>> presentList = new MutableLiveData<>();
+    private MutableLiveData<List<ArrivalsItem>> exitedList = new MutableLiveData<>();
+    private MutableLiveData<List<ArrivalsItem>> arrivalListByNationalCode = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isDeparture = new MutableLiveData<>();
     private HomeRepository homeRepository;
-    private CompositeDisposable compositeDisposable=new CompositeDisposable();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public CustomerViewModel(@NonNull Application application, ApiService apiService) {
         super(application);
@@ -39,22 +40,9 @@ public class CustomerViewModel extends AndroidViewModel {
         homeRepository.getArrivalDepartureList(1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<ArrivalsItem>>() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onSuccess(@io.reactivex.annotations.NonNull List<ArrivalsItem> arrivalsItems) {
-                        presentList.postValue(arrivalsItems);
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-
-                    }
-                });
+                .doOnSubscribe(disposable -> compositeDisposable.add(disposable))
+                .doOnSuccess(arrivalsItems -> presentList.postValue(arrivalsItems))
+                .subscribe();
 
         return presentList;
     }
@@ -84,8 +72,8 @@ public class CustomerViewModel extends AndroidViewModel {
         return exitedList;
     }
 
-    public LiveData<List<ArrivalsItem>> getPresentListByNationalCode(String nationalCode , int present) {
-        homeRepository.getArrivalDepartureListByNationalCode(nationalCode , present)
+    public LiveData<List<ArrivalsItem>> getPresentListByNationalCode(String nationalCode, int present) {
+        homeRepository.getArrivalDepartureListByNationalCode(nationalCode, present)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<ArrivalsItem>>() {
@@ -124,7 +112,9 @@ public class CustomerViewModel extends AndroidViewModel {
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-
+                        Log.i(TAG, "onError: " + e.getMessage());
+                        if (e.getMessage().equals("HTTP 400 Bad Request"))
+                            isDeparture.postValue(false);
                     }
                 });
 

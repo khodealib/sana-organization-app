@@ -16,69 +16,71 @@ import java.util.List;
 
 public class CustomerPresentItemAdapter extends RecyclerView.Adapter<CustomerPresentItemAdapter.CustomerPresentItemViewHolder> {
 
-    private List<ArrivalsItem> arrivalsItems;
+    private List<ArrivalsItem> arrivalsItemList;
     private CustomerPresentItemCallBack callBack;
+    private static final String TAG = "CustomerPresentItemAdap";
 
-    public CustomerPresentItemAdapter(List<ArrivalsItem> arrivalsItem,CustomerPresentItemCallBack callBack) {
-        this.arrivalsItems = arrivalsItem;
+    public CustomerPresentItemAdapter(List<ArrivalsItem> arrivalsItemList, CustomerPresentItemCallBack callBack) {
+        this.arrivalsItemList = arrivalsItemList;
         this.callBack = callBack;
     }
 
     @NonNull
     @Override
-    public CustomerPresentItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.item_customer_list, parent, false);
+    public CustomerPresentItemAdapter.CustomerPresentItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_customer_list, parent, false);
         return new CustomerPresentItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomerPresentItemViewHolder holder, int position) {
-        holder.bind(arrivalsItems.get(position));
+    public void onBindViewHolder(@NonNull CustomerPresentItemAdapter.CustomerPresentItemViewHolder holder, int position) {
+        holder.bind(arrivalsItemList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return arrivalsItems.size();
+        return arrivalsItemList.size();
     }
 
-    public void addAllItems(List<ArrivalsItem> arrivalsItems) {
-        this.arrivalsItems = arrivalsItems;
+    public void setArrivalsItemList(List<ArrivalsItem> arrivalsItemList) {
+        this.arrivalsItemList = arrivalsItemList;
         notifyDataSetChanged();
     }
 
-    public void clear() {
-        arrivalsItems.clear();
-        notifyDataSetChanged();
+    public interface CustomerPresentItemCallBack {
+        void onExitButtonClickListener(ArrivalsItem arrivalsItem);
     }
 
     public class CustomerPresentItemViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView firstNameTv;
-        private TextView lastNameTv;
-        private TextView nationalCodeTv;
-        private TextView arrivalDateTv;
-        private LoadingButton exitBtn;
+        private TextView firstName;
+        private TextView lastName;
+        private TextView nationalCode;
+        private TextView arrivalDate;
+        private LoadingButton setExit;
+
         public CustomerPresentItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            firstNameTv = itemView.findViewById(R.id.tv_present_customer_firstName);
-            lastNameTv=itemView.findViewById(R.id.tv_present_cusomer_lastName);
-            nationalCodeTv=itemView.findViewById(R.id.tv_present_customer_nationalCode);
-            arrivalDateTv = itemView.findViewById(R.id.tv_present_customer_arrivalDate);
-            exitBtn = itemView.findViewById(R.id.btn_present_customer_exit);
+            firstName = itemView.findViewById(R.id.tv_present_customer_firstName);
+            lastName = itemView.findViewById(R.id.tv_present_customer_lastName);
+            nationalCode = itemView.findViewById(R.id.tv_present_customer_nationalCode);
+            arrivalDate = itemView.findViewById(R.id.tv_present_customer_arrivalDate);
+            setExit = itemView.findViewById(R.id.btn_present_customer_exit);
         }
 
         public void bind(ArrivalsItem arrivalsItem) {
-            firstNameTv.setText(arrivalsItem.getCustomerArrivalDeparture().getFirstName());
-            lastNameTv.setText(arrivalsItem.getCustomerArrivalDeparture().getLastName());
-            nationalCodeTv.setText(arrivalsItem.getCustomerArrivalDeparture().getNationalCode());
-            arrivalDateTv.setText(arrivalsItem.getArrivalTime());
+            firstName.setText(arrivalsItem.getCustomerArrivalDeparture().getFirstName());
+            lastName.setText(arrivalsItem.getCustomerArrivalDeparture().getLastName());
+            nationalCode.setText(arrivalsItem.getCustomerArrivalDeparture().getNationalCode());
+            arrivalDate.setText(arrivalsItem.getArrivalTime());
 
-            exitBtn.setOnClickListener(view -> callBack.setExitButtonClickListener(arrivalsItem));
+            setExit.setOnClickListener(view -> {
+
+                setExit.showLoading();
+                callBack.onExitButtonClickListener(arrivalsItem);
+                setExit.hideLoading();
+            });
         }
-    }
-
-    public interface CustomerPresentItemCallBack{
-        void setExitButtonClickListener(ArrivalsItem arrivalsItem);
     }
 }

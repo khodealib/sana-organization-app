@@ -1,6 +1,7 @@
 package com.asenadev.sana.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +31,12 @@ import com.nex3z.togglebuttongroup.SingleSelectToggleGroup;
 
 public class CustomerFragment extends Fragment implements CustomerPresentItemAdapter.CustomerPresentItemCallBack {
 
+    private static final String TAG = "CustomerFragment";
     private CustomerViewModel customerViewModel;
     private SingleSelectToggleGroup toggleGroup;
     private TextInputEditText nationalCode;
     private RecyclerView recyclerViewCustomerList;
-    private CustomerState customerState;
+    private CustomerState customerState = CustomerState.PRESENT;
     private CustomerExitedItemAdapter exitedItemAdapter;
     private CustomerPresentItemAdapter presentItemAdapter;
     private LoadingButton searchBtn;
@@ -43,19 +45,14 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_customer_list, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         TokenHolder tokenHolder = new TokenHolder(getContext());
-
         customerViewModel = new ViewModelProvider(
                 getActivity(), new ViewModelFactory(getActivity().getApplication(),
                 tokenHolder, ApiServiceProvider.createService(ApiService.class, tokenHolder.getUserLoginToken()))
         ).get(CustomerViewModel.class);
+
 
         toggleGroup = view.findViewById(R.id.toggleButton);
         nationalCode = view.findViewById(R.id.et_customer_national_search);
@@ -63,67 +60,134 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
         swipeContainer = view.findViewById(R.id.srl_customer_refresh);
 
         recyclerViewCustomerList = view.findViewById(R.id.rv_customer_list);
+
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerViewCustomerList.setLayoutManager(linearLayoutManager);
 
-        customerViewModel.getPresentList().observe(getActivity(), arrivalsItems -> {
-            presentItemAdapter = new CustomerPresentItemAdapter(arrivalsItems, this);
-        });
+        updatePresentList();
 
-        customerViewModel.getExitedList().observe(getActivity(), arrivalsItems -> {
-            exitedItemAdapter = new CustomerExitedItemAdapter(arrivalsItems);
-        });
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
 
         toggleGroup.setOnCheckedChangeListener((group, checkedId) -> {
+
             if (checkedId == R.id.ltb_customer_present) {
+
                 customerState = CustomerState.PRESENT;
-                recyclerViewCustomerList.setAdapter(presentItemAdapter);
+                updatePresentList();
 
             } else if (checkedId == R.id.ltb_customer_exited) {
-                customerState = CustomerState.EXITED;
-                recyclerViewCustomerList.setAdapter(exitedItemAdapter);
 
+                customerState = CustomerState.EXITED;
+                updateExitedList();
             }
         });
 
 
         searchBtn.setOnClickListener(view1 -> {
+
             if (customerState == CustomerState.PRESENT) {
-                customerViewModel.getPresentListByNationalCode(nationalCode.getText().toString(), 1)
-                        .observe(getActivity(), arrivalsItems -> presentItemAdapter.addAllItems(arrivalsItems));
+
+                updatePresentListWithQuery(nationalCode.getText().toString());
+
             } else {
-                customerViewModel.getPresentListByNationalCode(nationalCode.getText().toString(), 0)
-                        .observe(getActivity(), arrivalsItems -> exitedItemAdapter.addAll(arrivalsItems));
+
+                updateExitedListWithQuery(nationalCode.getText().toString());
             }
         });
 
         swipeContainer.setOnRefreshListener(() -> {
-            customerViewModel.getPresentList().observe(getActivity(), arrivalsItems -> {
-                presentItemAdapter.clear();
-                presentItemAdapter.addAllItems(arrivalsItems);
-            });
+            nationalCode.clearComposingText();
+            if (customerState == CustomerState.PRESENT) {
 
-            customerViewModel.getExitedList().observe(getActivity(), arrivalsItems -> {
-                exitedItemAdapter.clear();
-                exitedItemAdapter.addAll(arrivalsItems);
-            });
+                updatePresentList();
+            }
+
+            if (customerState == CustomerState.EXITED) {
+
+                updateExitedList();
+            }
 
             swipeContainer.setRefreshing(false);
         });
     }
 
-    @Override
-    public void setExitButtonClickListener(ArrivalsItem arrivalsItem) {
-        customerViewModel.setDeparture(arrivalsItem.getId())
-                .observe(getActivity(), aBoolean -> {
-                    if (!aBoolean)
-                        Toast.makeText(getContext(), "آخرین ارجاع تکمیل نشده است!", Toast.LENGTH_SHORT).show();
-                    else {
-                        Toast.makeText(getContext(), "خروج ثبت شد.", Toast.LENGTH_SHORT).show();
-                        customerViewModel.getPresentList()
-                                .observe(getActivity(), arrivalsItems -> presentItemAdapter.addAllItems(arrivalsItems));
+    public void updatePresentList() {
+
+        customerViewModel.getPresentList()
+                .observe(getActivity(), arrivalsItems -> {
+                    Log.i(TAG, "onCreateView: ");
+                    if (customerState == CustomerState.PRESENT) {
+
+                        if (presentItemAdapter == null)
+                            presentItemAdapter = new CustomerPresentItemAdapter(arrivalsItems, this);
+                        else presentItemAdapter.setArrivalsItemList(arrivalsItems);
+                        recyclerViewCustomerList.setAdapter(presentItemAdapter);
                     }
                 });
     }
 
+    public void updatePresentListWithQuery(String query) {
+        customerViewModel.getPresentListByNationalCode(query, 1)
+                .observe(getActivity(), arrivalsItems -> {
+                    Log.i(TAG, "onCreateView: ");
+                    if (customerState == CustomerState.PRESENT) {
+
+                        if (presentItemAdapter == null)
+                            presentItemAdapter = new CustomerPresentItemAdapter(arrivalsItems, this);
+                        else presentItemAdapter.setArrivalsItemList(arrivalsItems);
+                        recyclerViewCustomerList.setAdapter(presentItemAdapter);
+                    }
+                });
+    }
+
+    public void updateExitedList() {
+
+        customerViewModel.getExitedList()
+                .observe(getActivity(), arrivalsItems -> {
+                    if (customerState == CustomerState.EXITED) {
+
+                        if (exitedItemAdapter == null) {
+                            exitedItemAdapter = new CustomerExitedItemAdapter(arrivalsItems);
+                        } else exitedItemAdapter.setArrivalsItems(arrivalsItems);
+                        recyclerViewCustomerList.setAdapter(exitedItemAdapter);
+                    }
+                });
+    }
+
+    public void updateExitedListWithQuery(String query) {
+
+        customerViewModel.getPresentListByNationalCode(query, 0)
+                .observe(getActivity(), arrivalsItems -> {
+                    if (customerState == CustomerState.EXITED) {
+
+                        if (exitedItemAdapter == null) {
+                            exitedItemAdapter = new CustomerExitedItemAdapter(arrivalsItems);
+                        } else exitedItemAdapter.setArrivalsItems(arrivalsItems);
+                        recyclerViewCustomerList.setAdapter(exitedItemAdapter);
+                    }
+                });
+    }
+
+
+    @Override
+    public void onExitButtonClickListener(ArrivalsItem arrivalsItem) {
+
+        customerViewModel.setDeparture(arrivalsItem.getId())
+                .observe(getActivity(), isExit -> {
+
+                    Log.i(TAG, "onExitButtonClickListener: "+isExit);
+                    if (isExit) {
+                        updatePresentList();
+                        Toast.makeText(getContext(), "خروج ثبت شد", Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(getContext(), "آخرین ارجاع تکمیل نشده است!", Toast.LENGTH_SHORT).show();
+
+                });
+    }
 }
