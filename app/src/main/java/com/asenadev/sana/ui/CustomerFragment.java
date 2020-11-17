@@ -50,7 +50,7 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
         TokenHolder tokenHolder = new TokenHolder(getContext());
         customerViewModel = new ViewModelProvider(
                 getActivity(), new ViewModelFactory(getActivity().getApplication(),
-                tokenHolder, ApiServiceProvider.createService(ApiService.class, tokenHolder.getUserLoginToken()))
+                ApiServiceProvider.createService(ApiService.class, tokenHolder.getUserLoginToken()))
         ).get(CustomerViewModel.class);
 
 
@@ -182,11 +182,12 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
         customerViewModel.setDeparture(arrivalsItem.getId())
                 .observe(getActivity(), isExit -> {
 
-                    Log.i(TAG, "onExitButtonClickListener: "+isExit);
+                    Log.i(TAG, "onExitButtonClickListener: " + isExit);
                     if (isExit) {
                         updatePresentList();
                         Toast.makeText(getContext(), "خروج ثبت شد", Toast.LENGTH_SHORT).show();
-                    } else Toast.makeText(getContext(), "آخرین ارجاع تکمیل نشده است!", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(getContext(), "آخرین ارجاع تکمیل نشده است!", Toast.LENGTH_SHORT).show();
 
                 });
     }

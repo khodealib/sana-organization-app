@@ -24,6 +24,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         this.apiService = apiService;
     }
 
+    public ViewModelFactory(Application application, ApiService apiService) {
+        this.apiService = apiService;
+        this.application = application;
+    }
 
     @NonNull
     @Override
@@ -31,10 +35,11 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
             return (T) new LoginViewModel(application, tokenHolder, apiService);
         } else if (modelClass.isAssignableFrom(DashboardViewModel.class)) {
-            return (T) new DashboardViewModel(application, tokenHolder, apiService);
+            return (T) new DashboardViewModel(application, apiService);
         } else if (modelClass.isAssignableFrom(CustomerViewModel.class)) {
             return (T) new CustomerViewModel(application, apiService);
-        }
+        } else if (modelClass.isAssignableFrom(ProfileViewModel.class))
+            return (T) new ProfileViewModel(application, apiService);
 
         return null;
     }

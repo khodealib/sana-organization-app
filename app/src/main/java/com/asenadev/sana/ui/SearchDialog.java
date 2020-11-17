@@ -73,7 +73,6 @@ public class SearchDialog extends DialogFragment implements EmployeeItemAdapter.
 
         return builder.create();
     }
-    // TODO create exit button in searchDialog and handle it
 
     @Override
     public void onEmployeeItemListener(Employee employee) {

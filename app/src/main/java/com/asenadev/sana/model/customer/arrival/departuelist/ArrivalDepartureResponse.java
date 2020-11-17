@@ -1,16 +1,16 @@
-package com.asenadev.sana.model.profile;
+package com.asenadev.sana.model.customer.arrival.departuelist;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Profile{
+public class ArrivalDepartureResponse{
 
 	@SerializedName("code")
 	private int code;
 
 	@SerializedName("data")
-	private ProfileData profileData;
+	private Data data;
 
 	@SerializedName("messages")
 	private List<Object> messages;
@@ -22,8 +22,8 @@ public class Profile{
 		return code;
 	}
 
-	public ProfileData getProfileData(){
-		return profileData;
+	public Data getData(){
+		return data;
 	}
 
 	public List<Object> getMessages(){

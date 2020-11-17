@@ -8,7 +8,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.asenadev.sana.model.TokenHolder;
 import com.asenadev.sana.model.customer.get.Customer;
 import com.asenadev.sana.model.employee.Employee;
 import com.asenadev.sana.model.remote.ApiService;
@@ -25,20 +24,18 @@ import io.reactivex.schedulers.Schedulers;
 public class DashboardViewModel extends AndroidViewModel {
 
     private static final String TAG = "DashboardViewModel";
-    private final TokenHolder tokenHolder;
     private final HomeRepository homeRepository;
-    private MutableLiveData<Boolean> isExistCustomer=new MutableLiveData<>();
-    private MutableLiveData<Boolean> isCreatedCustomer=new MutableLiveData<>();
-    private CompositeDisposable compositeDisposable=new CompositeDisposable();
-    private MutableLiveData<Customer> customerProfileLiveData=new MutableLiveData<>();
-    private MutableLiveData<List<Employee>> employeeListLiveData=new MutableLiveData<>();
-    private MutableLiveData<Boolean> isRefersTo=new MutableLiveData<>();
-    private MutableLiveData<Boolean> isCompletedReference=new MutableLiveData<>();
-    private MutableLiveData<Boolean> isExited=new MutableLiveData<>();
+    private MutableLiveData<Boolean> isExistCustomer = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isCreatedCustomer = new MutableLiveData<>();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private MutableLiveData<Customer> customerProfileLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Employee>> employeeListLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isRefersTo = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isCompletedReference = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isExited = new MutableLiveData<>();
 
-    public DashboardViewModel(@NonNull Application application, TokenHolder tokenHolder, ApiService apiService) {
+    public DashboardViewModel(@NonNull Application application, ApiService apiService) {
         super(application);
-        this.tokenHolder = tokenHolder;
         this.homeRepository = new HomeRepository(apiService);
     }
 
@@ -93,8 +90,8 @@ public class DashboardViewModel extends AndroidViewModel {
         return customerProfileLiveData;
     }
 
-    public LiveData<Boolean> addCustomerProfile(String firstName,String lastName, String fatherName, String phoneNumber , String nationalCode) {
-        homeRepository.addUpdateCustomer(firstName,lastName,fatherName,phoneNumber,nationalCode)
+    public LiveData<Boolean> addCustomerProfile(String firstName, String lastName, String fatherName, String phoneNumber, String nationalCode) {
+        homeRepository.addUpdateCustomer(firstName, lastName, fatherName, phoneNumber, nationalCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Boolean>() {
@@ -114,8 +111,9 @@ public class DashboardViewModel extends AndroidViewModel {
                     }
                 });
 
-        return  isCreatedCustomer;
+        return isCreatedCustomer;
     }
+
     public LiveData<List<Employee>> getEmployeeList() {
         homeRepository.getEmployeeList()
                 .subscribeOn(Schedulers.io())
@@ -139,8 +137,8 @@ public class DashboardViewModel extends AndroidViewModel {
         return employeeListLiveData;
     }
 
-    public LiveData<Boolean> setCustomerReferral(String customerId , String employeeId , String description) {
-        homeRepository.referralTo(customerId,employeeId,description)
+    public LiveData<Boolean> setCustomerReferral(String customerId, String employeeId, String description) {
+        homeRepository.referralTo(customerId, employeeId, description)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Boolean>() {
@@ -187,7 +185,7 @@ public class DashboardViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> setExitCustomer(String userId) {
-        Log.i(TAG, "setExitCustomer: "+ userId);
+        Log.i(TAG, "setExitCustomer: " + userId);
         homeRepository.setExit(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -200,12 +198,12 @@ public class DashboardViewModel extends AndroidViewModel {
                     @Override
                     public void onSuccess(@io.reactivex.annotations.NonNull Boolean isExit) {
                         isExited.postValue(isExit);
-                        Log.i(TAG, "onSuccess: "+ isExit);
+                        Log.i(TAG, "onSuccess: " + isExit);
                     }
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                        Log.i(TAG, "onError: "+e.getMessage() + e.toString());
+                        Log.i(TAG, "onError: " + e.getMessage() + e.toString());
                     }
                 });
 

@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import com.asenadev.sana.model.customer.arrival.departuelist.ArrivalsItem;
 import com.asenadev.sana.model.customer.get.Customer;
 import com.asenadev.sana.model.employee.Employee;
+import com.asenadev.sana.model.profile.Profile;
+import com.asenadev.sana.model.profile.ProfileData;
 import com.asenadev.sana.model.remote.ApiService;
 
 import java.util.List;
@@ -62,5 +64,9 @@ public class HomeRepository {
 
     public Single<Boolean> submitCustomerDeparture(String arrivalId) {
         return apiService.submitDeparture(arrivalId).map(submitDepartureResponse -> submitDepartureResponse.getCode() == 200);
+    }
+
+    public Single<ProfileData> getProfile() {
+        return apiService.getProfile().map(Profile::getProfileData);
     }
 }

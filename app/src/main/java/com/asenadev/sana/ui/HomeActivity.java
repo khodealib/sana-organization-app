@@ -74,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
                     profileTransaction.commit();
 
                 }
-            } else if (itemId == R.id.mi_exit) {// TODO
+            } else if (itemId == R.id.mi_exit) {
                 ExitDialog exitDialog = new ExitDialog(this);
                 exitDialog.show(getSupportFragmentManager(),null);
             } else if (itemId == R.id.mi_present) {

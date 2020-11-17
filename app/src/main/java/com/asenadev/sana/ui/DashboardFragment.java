@@ -34,22 +34,12 @@ import com.kusu.library.LoadingButton;
 public class DashboardFragment extends Fragment implements SearchDialog.SearchDialogCallBack, CustomerReferralItemAdapter.ReferralItemCallBack {
     private static final String TAG = "DashboardFragment";
     private static boolean isCreate = false;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        return view;
-    }
-
     private TextInputEditText referralNationalCodeEt;
     private LoadingButton checkCustomerBtn;
     private DashboardViewModel dashboardViewModel;
     private View createCustomerView;
     private View profileCustomerView;
     private RecyclerView referralRecyclerView;
-
     //profile
     private TextView customerNameTv;
     private TextView customerLastNameTv;
@@ -62,7 +52,6 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
     private SearchDialog searchDialog;
     private TextView employeeNameTv;
     private LoadingButton setExitedBtn;
-
     //create profile
     private TextInputEditText customerFirstNameEt;
     private TextInputEditText customerLastNameEt;
@@ -72,8 +61,15 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
     private LoadingButton saveCustomerProfileBtn;
     private Button customerChoosePicBtn;
     private Customer customerGet;
-
     private CustomerReferralItemAdapter adapterReferralList;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        return view;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -83,7 +79,7 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
         Log.i(TAG, "onViewCreated: ");
         dashboardViewModel = new ViewModelProvider(
                 getActivity(),
-                new ViewModelFactory(getActivity().getApplication(), tokenHolder,
+                new ViewModelFactory(getActivity().getApplication(),
                         ApiServiceProvider.createService(ApiService.class, token)))
                 .get(DashboardViewModel.class);
 
