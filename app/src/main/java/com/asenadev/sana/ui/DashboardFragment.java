@@ -1,6 +1,11 @@
 package com.asenadev.sana.ui;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +32,16 @@ import com.asenadev.sana.model.remote.ApiServiceProvider;
 import com.asenadev.sana.model.viewmodel.DashboardViewModel;
 import com.asenadev.sana.model.viewmodel.ViewModelFactory;
 import com.asenadev.sana.ui.adapter.CustomerReferralItemAdapter;
-import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kusu.library.LoadingButton;
+import com.squareup.picasso.Picasso;
 
-public class DashboardFragment extends Fragment implements SearchDialog.SearchDialogCallBack, CustomerReferralItemAdapter.ReferralItemCallBack {
+import java.io.File;
+
+public class DashboardFragment extends Fragment implements SearchDialog.SearchDialogCallBack, CustomerReferralItemAdapter.ReferralItemCallBack, PicturePickerDialog.PicturePickerCallBack {
     private static final String TAG = "DashboardFragment";
+    private static final int GALLERY_REQUEST_CODE = 150;
+    private static final int CAMERA_REQUEST_CODE = 151;
     private static boolean isCreate = false;
     private TextInputEditText referralNationalCodeEt;
     private LoadingButton checkCustomerBtn;
@@ -60,8 +69,10 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
     private TextInputEditText customerPhoneNumberEt;
     private LoadingButton saveCustomerProfileBtn;
     private Button customerChoosePicBtn;
+    private ImageView customerProfilePicIv;
     private Customer customerGet;
     private CustomerReferralItemAdapter adapterReferralList;
+    private File imageFile;
 
     @Nullable
     @Override
@@ -109,6 +120,8 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
         customerPhoneNumberEt = view.findViewById(R.id.et_dashboard_phoneNumber);
         customerNationalCodeEt = view.findViewById(R.id.et_dashboard_national_code);
         saveCustomerProfileBtn = view.findViewById(R.id.btn_dashboard_saveCustomerProfile);
+        customerChoosePicBtn = view.findViewById(R.id.btn_dashboard_choose_pic);
+        customerProfilePicIv = view.findViewById(R.id.iv_saveInfo_customer);
 
         if (createCustomerView.getVisibility() == View.VISIBLE) {
             createCustomerView.setVisibility(View.GONE);
@@ -203,7 +216,7 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
             customerNationalCodeTv.setText(customer.getNationalCode());
 
             if (customer.getPicture() != null) {
-                Glide.with(getContext())
+                Picasso.get()
                         .load(customer.getPicture())
                         .into(customerPicIv);
             }
@@ -230,6 +243,13 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
         createCustomerView.setVisibility(View.VISIBLE);
         customerNationalCodeEt.setText(nationalCode);
 
+        customerChoosePicBtn.setOnClickListener(view -> {
+
+            PicturePickerDialog dialog = new PicturePickerDialog(this);
+            if (getFragmentManager() != null) {
+                dialog.show(getFragmentManager(), null);
+            }
+        });
         saveCustomerProfileBtn.setOnClickListener(view -> {
             saveCustomerProfileBtn.showLoading();
             if (!customerFirstNameEt.getText().toString().equals("") && !customerLastNameEt.getText().toString().equals("")
@@ -241,6 +261,7 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
                         customerFatherNameEt.getText().toString(),
                         customerPhoneNumberEt.getText().toString(),
                         customerNationalCodeEt.getText().toString()
+                        , imageFile
                 ).observe(getActivity(), isCreated -> {
                     Log.i(TAG, "createCustomerProfile: " + isCreated.toString());
                     if (isCreated)
@@ -291,5 +312,50 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
                         Toast.makeText(getContext(), "فرآیند تمکیل شد", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    public void onGalleryClickListener() {
+
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto, GALLERY_REQUEST_CODE);
+    }
+
+    @Override
+    public void onCameraClickListener() {
+
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture, CAMERA_REQUEST_CODE);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch (requestCode) {
+            case CAMERA_REQUEST_CODE:
+
+            case GALLERY_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri imagePath = imageReturnedIntent.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    if (!filePathColumn.equals(null)){
+                        Cursor cursor=getActivity().getContentResolver().query(imagePath,filePathColumn,null,null,null);
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String picturePath = cursor.getString(columnIndex);
+                        cursor.close();
+
+                        imageFile = new File(picturePath);
+                    }
+                    Picasso.get()
+                            .load(imageFile)
+                            .into(customerProfilePicIv);
+
+                }
+                break;
+        }
     }
 }

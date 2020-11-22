@@ -14,7 +14,6 @@ import com.asenadev.sana.model.remote.ApiService;
 import com.asenadev.sana.model.remote.ApiServiceProvider;
 import com.asenadev.sana.model.viewmodel.LoginViewModel;
 import com.asenadev.sana.model.viewmodel.ViewModelFactory;
-import com.asenadev.sana.utils.NetworkUtil;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kusu.library.LoadingButton;
 
@@ -60,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginBtn.setOnClickListener(view -> {
 
-            if (NetworkUtil.checkNetworkState(getApplicationContext())) {
+            if (true) {
                 if (userNameEt.getText().toString().equals("")) {
                     userNameEt.setError("نام کاربری را وارد کنید");
                 }

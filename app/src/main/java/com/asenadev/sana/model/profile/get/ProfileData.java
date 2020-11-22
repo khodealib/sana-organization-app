@@ -1,4 +1,4 @@
-package com.asenadev.sana.model.profile;
+package com.asenadev.sana.model.profile.get;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -50,7 +50,7 @@ public class ProfileData {
 		return name;
 	}
 
-	public Object getProfilePic(){
+	public String getProfilePic(){
 		return profilePic;
 	}
 
@@ -60,5 +60,19 @@ public class ProfileData {
 
 	public String getUsername(){
 		return username;
+	}
+
+	@Override
+	public String toString() {
+		return "ProfileData{" +
+				"post='" + post + '\'' +
+				", roleId='" + roleId + '\'' +
+				", permissions=" + permissions +
+				", referrals=" + referrals +
+				", name='" + name + '\'' +
+				", profilePic='" + profilePic + '\'' +
+				", id='" + id + '\'' +
+				", username='" + username + '\'' +
+				'}';
 	}
 }

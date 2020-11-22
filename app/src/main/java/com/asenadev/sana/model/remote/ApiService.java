@@ -9,15 +9,18 @@ import com.asenadev.sana.model.customer.get.CustomerGetInfoResponse;
 import com.asenadev.sana.model.customer.referralcompleted.CompleteReferralResponse;
 import com.asenadev.sana.model.employee.EmployeeResponse;
 import com.asenadev.sana.model.login.LoginResponse;
-import com.asenadev.sana.model.profile.Profile;
+import com.asenadev.sana.model.profile.get.GetProfileResponse;
 import com.asenadev.sana.model.profile.update.UpdateProfileResponse;
 
 import io.reactivex.Single;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -33,6 +36,18 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("customer/get-info")
     Single<CustomerGetInfoResponse> getCustomer(@Field("national_id") String nationalID);
+
+    @Multipart
+    @POST("customer/add")
+    Single<CustomerAddResponse> addCustomer(
+
+            @Part("first_name") RequestBody firstName,
+            @Part("last_name") RequestBody lastName,
+            @Part("father_name") RequestBody fatherName,
+            @Part("mobile_number") RequestBody mobileNumber,
+            @Part("national_code") RequestBody nationalID ,
+            @Part MultipartBody.Part image
+    );
 
     @FormUrlEncoded
     @POST("customer/add")
@@ -55,14 +70,21 @@ public interface ApiService {
     );
 
     @GET("profile")
-    Single<Profile> getProfile();
+    Single<GetProfileResponse> getProfile();
+
+    @Multipart
+    @POST("employee/update-own-profile")
+    Single<UpdateProfileResponse> updateProfile(
+        @Part("name") RequestBody name,
+        @Part("username") RequestBody username,
+        @Part MultipartBody.Part image
+    );
 
     @FormUrlEncoded
     @POST("employee/update-own-profile")
     Single<UpdateProfileResponse> updateProfile(
             @Field("name") String name,
-            @Field("username") String username,
-            @Field("profile_pic") MultipartBody profilePic
+            @Field("username") String username
     );
 
     @FormUrlEncoded

@@ -28,7 +28,7 @@ public class Customer{
 	private String firstName;
 
 	@SerializedName("picture")
-	private Object picture;
+	private String picture;
 
 	public String getNationalCode(){
 		return nationalCode;
@@ -58,7 +58,7 @@ public class Customer{
 		return firstName;
 	}
 
-	public Object getPicture(){
+	public String getPicture(){
 		return picture;
 	}
 }

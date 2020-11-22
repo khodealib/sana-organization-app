@@ -13,6 +13,7 @@ import com.asenadev.sana.model.employee.Employee;
 import com.asenadev.sana.model.remote.ApiService;
 import com.asenadev.sana.model.repository.HomeRepository;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.SingleObserver;
@@ -90,8 +91,8 @@ public class DashboardViewModel extends AndroidViewModel {
         return customerProfileLiveData;
     }
 
-    public LiveData<Boolean> addCustomerProfile(String firstName, String lastName, String fatherName, String phoneNumber, String nationalCode) {
-        homeRepository.addUpdateCustomer(firstName, lastName, fatherName, phoneNumber, nationalCode)
+    public LiveData<Boolean> addCustomerProfile(String firstName, String lastName, String fatherName, String phoneNumber, String nationalCode, File image) {
+        homeRepository.addUpdateCustomer(firstName, lastName, fatherName, phoneNumber, nationalCode,image)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<Boolean>() {
@@ -107,7 +108,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-
+                        Log.i(TAG, "onError: "+e.getMessage());
                     }
                 });
 
