@@ -28,6 +28,7 @@ public class SearchDialog extends DialogFragment implements EmployeeItemAdapter.
     private List<Employee> employees;
     private SearchDialogCallBack callBack;
     private Button cancelBtn;
+    private EmployeeItemAdapter employeeItemAdapter;
     private static final String TAG = "SearchDialog";
 
     public SearchDialog(List<Employee> employees, SearchDialogCallBack callBack) {
@@ -47,7 +48,7 @@ public class SearchDialog extends DialogFragment implements EmployeeItemAdapter.
         employeeRecyclerView = view.findViewById(R.id.rv_employee_list);
         cancelBtn=view.findViewById(R.id.btn_employee_cancel);
 
-        EmployeeItemAdapter employeeItemAdapter = new EmployeeItemAdapter(employees, this);
+        employeeItemAdapter = new EmployeeItemAdapter(employees, this);
         employeeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         employeeRecyclerView.setAdapter(employeeItemAdapter);
 
@@ -72,6 +73,11 @@ public class SearchDialog extends DialogFragment implements EmployeeItemAdapter.
         });
 
         return builder.create();
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+        employeeItemAdapter.addAll(employees);
     }
 
     @Override

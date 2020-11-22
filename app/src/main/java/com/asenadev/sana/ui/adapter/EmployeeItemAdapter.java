@@ -71,6 +71,11 @@ public class EmployeeItemAdapter extends RecyclerView.Adapter<EmployeeItemAdapte
         notifyDataSetChanged();
     }
 
+    public void addAll(List<Employee> employees) {
+        this.employeesFilter = employees;
+        notifyDataSetChanged();
+    }
+
     public class EmployeeItemHolder extends RecyclerView.ViewHolder{
 
         private TextView employeeNameTv;

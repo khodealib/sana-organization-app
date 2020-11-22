@@ -51,6 +51,8 @@
                     android:layout_width="match_parent"
                     android:textColor="@color/black"
                     android:maxLines="1"
+                    android:inputType="number"
+                    android:maxLength="10"
                     android:textSize="12sp"
                     android:layout_height="wrap_content" />
 
@@ -64,6 +66,7 @@
                 android:backgroundTint="@color/black"
                 android:fontFamily="@font/font_regular"
                 android:text="بررسی"
+                app:lb_loaderWidth="5dp"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/etl_dashboard_referral_national_code"
                 app:layout_constraintStart_toStartOf="parent"

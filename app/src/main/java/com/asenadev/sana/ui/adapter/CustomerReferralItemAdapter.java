@@ -1,6 +1,6 @@
 package com.asenadev.sana.ui.adapter;
 
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +49,8 @@ public class CustomerReferralItemAdapter extends RecyclerView.Adapter<CustomerRe
     }
 
     public void updateStatus(List<ReferralItem> referralItems) {
-//        referrals.clear();
-        Log.i(TAG, "updateStatus: " + referralItems);
-//        referrals.addAll(referralItems);
-
 
         this.referrals = referralItems;
-        Log.i(TAG, "updateStatus: " + referrals.toString());
         notifyDataSetChanged();
     }
 

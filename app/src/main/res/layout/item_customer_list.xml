@@ -3,7 +3,7 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/gray400"
+    android:backgroundTint="@color/gray400"
     android:layout_margin="8dp">
 
     <LinearLayout
@@ -21,8 +21,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:textSize="12sp"
                 android:text="نام                   "
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +35,8 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="شماره ملی"
-                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -43,7 +45,11 @@
                 android:id="@+id/tv_present_customer_firstName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:text="TextView"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_present_customer_nationalCode"
                 app:layout_constraintEnd_toStartOf="@+id/textView6"
                 app:layout_constraintTop_toTopOf="@+id/textView6" />
 
@@ -54,6 +60,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:text="TextView"
+                android:textSize="12sp"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/textView7"
                 app:layout_constraintStart_toEndOf="@+id/textView12"
                 app:layout_constraintTop_toTopOf="@+id/textView7" />
@@ -65,7 +73,9 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="32dp"
                 android:text="نام خانوادگی"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/textView12"
                 app:layout_constraintEnd_toStartOf="@+id/tv_present_customer_firstName"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,7 +86,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="ساعت ورود"
-                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView11"
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -88,6 +99,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:text="TextView"
+                android:textSize="12sp"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/textView11"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -100,6 +113,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:text="TextView"
+                android:textSize="12sp"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/textView12"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView12" />
@@ -112,7 +127,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:backgroundTint="@color/primaryColor"
+            android:backgroundTint="@color/primaryDarkColor"
             android:textColor="@color/white"
             android:text="ثبت خروج"
             android:letterSpacing="0"

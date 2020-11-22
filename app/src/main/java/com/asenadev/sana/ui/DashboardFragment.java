@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -177,10 +178,18 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
 
         searchBoxView.setOnClickListener(view1 -> {
             dashboardViewModel.getEmployeeList().observe(this, employees -> {
-
-                searchDialog = new SearchDialog(employees, this);
+                FragmentTransaction transaction=getFragmentManager().beginTransaction();
+                if (searchDialog == null) {
+                    searchDialog = new SearchDialog(employees, this);
+                } else searchDialog.setEmployees(employees);
                 searchDialog.setCancelable(false);
-                searchDialog.show(getFragmentManager().beginTransaction(), null);
+                if (getFragmentManager() != null) {
+
+                    if (searchDialog.isAdded()) {
+                        transaction.show(searchDialog);
+                    } else searchDialog.show(transaction, "search_dialog");
+
+                }
 
             });
         });
@@ -286,13 +295,20 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
             });
             refersToBtn.hideLoading();
 
-            searchBoxView.setVisibility(View.GONE);
-            refersToBtn.setVisibility(View.GONE);
-            referralRecyclerView.setVisibility(View.GONE);
-            profileCustomerView.setVisibility(View.GONE);
-            setExitedBtn.setVisibility(View.GONE);
+//            searchBoxView.setVisibility(View.GONE);
+//            refersToBtn.setVisibility(View.GONE);
+//            referralRecyclerView.setVisibility(View.GONE);
+//            profileCustomerView.setVisibility(View.GONE);
+//            setExitedBtn.setVisibility(View.GONE);
 
             employeeNameTv.setText("ارجاع به");
+
+            dashboardViewModel.getCustomerProfile(customerGet.getNationalCode())
+                    .observe(getActivity() , customer -> {
+                        if (customer.getReferrals()!=null) {
+                            adapterReferralList.updateStatus(customer.getReferrals());
+                        }
+                    });
         });
     }
 

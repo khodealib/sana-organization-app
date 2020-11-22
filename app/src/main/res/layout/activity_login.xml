@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,8 +14,7 @@
         android:layout_marginBottom="50dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:orientation="vertical"
-        android:background="@drawable/bg_login_white">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="150dp"
@@ -59,13 +58,15 @@
             android:textColorHint="@color/black"
             app:hintTextColor="@color/black"
             android:hint="@string/username_hint_login"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/textFieldTheme">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username_text_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layoutDirection="ltr"
+                android:inputType="number"
+                android:maxLength="10"
                 android:paddingStart="40dp"
                 />
 
@@ -81,13 +82,13 @@
             android:layout_marginTop="25dp"
             android:layoutDirection="rtl"
             app:passwordToggleEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/textFieldTheme">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_text_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
+                android:inputType="textPassword|number"
                 android:maxLines="1"
                 android:layoutDirection="ltr"
                 android:hint="@string/password_hint_login"
