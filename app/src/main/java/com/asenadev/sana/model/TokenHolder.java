@@ -1,13 +1,12 @@
 package com.asenadev.sana.model;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class TokenHolder {
 
-    private SharedPreferences sharedPreferences=null;
+    private SharedPreferences sharedPreferences = null;
 
     public TokenHolder(Context context) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -24,4 +23,5 @@ public class TokenHolder {
     public String getUserLoginToken() {
         return sharedPreferences.getString("token","");
     }
+
 }

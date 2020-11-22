@@ -23,9 +23,8 @@ public class LoginViewModel extends AndroidViewModel {
     private LoginRepository repository;
     private Disposable disposable;
 
-    private MutableLiveData<Boolean> isSuccessLogin;
+    private MutableLiveData<String> isSuccessLogin;
     private TokenHolder tokenHolder;
-    private LoginResponse response;
     private static final String TAG = "LoginViewModel";
 
     public LoginViewModel(@NonNull Application application, TokenHolder tokenHolder, ApiService apiService) {
@@ -36,11 +35,10 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<Boolean> login(String userName, String password) {
+    public LiveData<String> login(String userName, String password) {
         repository.login(userName, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSuccess(loginResponse -> isSuccessLogin.postValue(Boolean.TRUE))
                 .subscribe(new SingleObserver<LoginResponse>() {
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -50,14 +48,13 @@ public class LoginViewModel extends AndroidViewModel {
                     @Override
                     public void onSuccess(@io.reactivex.annotations.NonNull LoginResponse loginResponse) {
                         Log.i(TAG, "onSuccess: " + loginResponse.getData().getAccessToken());
-                        response = loginResponse;
-                        tokenHolder.saveUserLoginToken(loginResponse.getData().getAccessToken());
+                        isSuccessLogin.postValue(loginResponse.getData().getAccessToken());
                     }
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                         Log.i(TAG, "onError: error");
-                        isSuccessLogin.postValue(Boolean.FALSE);
+
                     }
                 });
 

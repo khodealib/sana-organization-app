@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText userNameEt;
     private TextInputEditText passwordEt;
     private LoadingButton loginBtn;
-    private String loginLog;
+    private TokenHolder tokenHolder;
 
     private LoginViewModel loginViewModel;
     private static final String TAG = "LoginActivity";
@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TokenHolder tokenHolder = new TokenHolder(this);
+        tokenHolder = new TokenHolder(this);
 
         if (!tokenHolder.getUserLoginToken().equals("")) {
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -71,8 +71,9 @@ public class LoginActivity extends AppCompatActivity {
                     loginBtn.showLoading();
                     loginViewModel.login(userNameEt.getText().toString(), passwordEt.getText().toString())
                             .observe(this, isSuccess -> {
-                                if (isSuccess) {
+                                if (!isSuccess.equals("")) {
                                     loginBtn.hideLoading();
+                                    tokenHolder.saveUserLoginToken(isSuccess);
                                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                     startActivity(intent);
                                     finish();

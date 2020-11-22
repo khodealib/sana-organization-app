@@ -33,6 +33,7 @@ import com.asenadev.sana.model.remote.ApiServiceProvider;
 import com.asenadev.sana.model.viewmodel.DashboardViewModel;
 import com.asenadev.sana.model.viewmodel.ViewModelFactory;
 import com.asenadev.sana.ui.adapter.CustomerReferralItemAdapter;
+import com.asenadev.sana.utils.Keyboard;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kusu.library.LoadingButton;
 import com.squareup.picasso.Picasso;
@@ -152,9 +153,10 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
 
         checkCustomerBtn.setOnClickListener(view1 -> {
 
+            Keyboard.hideKeyboard(getActivity());
 
-            checkCustomerBtn.showLoading();
             if (!referralNationalCodeEt.getText().toString().equals("")) {
+                checkCustomerBtn.showLoading();
                 String nationalCode = referralNationalCodeEt.getText().toString();
                 dashboardViewModel.checkExistCustomer(nationalCode)
                         .observe(getActivity(), isExist -> {

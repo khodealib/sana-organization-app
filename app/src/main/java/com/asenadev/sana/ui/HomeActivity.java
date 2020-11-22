@@ -3,6 +3,7 @@ package com.asenadev.sana.ui;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
     private View headerView;
     private TextView profileFullName;
     private HomeViewModel homeViewModel;
+    private ProgressBar progressBar;
 
 
     private View drawerToggle;
@@ -47,7 +49,7 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
 
         TokenHolder tokenHolder = new TokenHolder(getApplicationContext());
         Log.i(TAG, "onCreate: "+tokenHolder.getUserLoginToken());
-
+        ApiServiceProvider.clearRetrofit();
         homeViewModel = new ViewModelProvider(
                 this
                 , new ViewModelFactory(
@@ -67,8 +69,11 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
 
         profileFullName = headerView.findViewById(R.id.tv_header_fullName);
         navProfilePicIv = headerView.findViewById(R.id.iv_header_profile_pic);
-        updateProfile();
+        progressBar=findViewById(R.id.pb_home);
 
+        progressBar.setVisibility(View.VISIBLE);
+        updateProfile();
+        progressBar.setVisibility(View.GONE);
 
         drawerToggle.setOnClickListener(view -> {
             drawerLayout.openDrawer(GravityCompat.START, true);
@@ -147,6 +152,7 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
         if (result) {
             TokenHolder tokenHolder = new TokenHolder(this);
             tokenHolder.saveUserLoginToken("");
+            Log.i(TAG, "exitListener: "+tokenHolder.getUserLoginToken());
             finish();
         }
     }
