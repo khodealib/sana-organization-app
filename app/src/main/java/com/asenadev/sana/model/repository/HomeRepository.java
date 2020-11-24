@@ -7,6 +7,9 @@ import com.asenadev.sana.model.customer.get.Customer;
 import com.asenadev.sana.model.employee.Employee;
 import com.asenadev.sana.model.profile.get.GetProfileResponse;
 import com.asenadev.sana.model.profile.get.ProfileData;
+import com.asenadev.sana.model.referral.ReferralDataItem;
+import com.asenadev.sana.model.referral.ReferralResponse;
+import com.asenadev.sana.model.referral.history.ReferralsItem;
 import com.asenadev.sana.model.remote.ApiService;
 
 import java.io.File;
@@ -89,8 +92,6 @@ public class HomeRepository {
     }
 
 
-
-
     public Single<Boolean> updateOwnProfile(String fullName, String nationalCode, File imageFile) {
 
         RequestBody fullNameBody = RequestBody.create(MediaType.parse("text/plain"), fullName);
@@ -106,5 +107,19 @@ public class HomeRepository {
 
 
         return apiService.updateProfile(fullName, nationalCode).map(updateProfileResponse -> updateProfileResponse.getCode() == 200);
+    }
+
+    public Single<List<ReferralDataItem>> getReferralList() {
+        return apiService.getReferral().map(ReferralResponse::getData);
+    }
+
+
+    public Single<List<ReferralsItem>> getMyReferralHistoryItems(String nationalCode, String date) {
+
+        return apiService.getMyHistory(nationalCode, date).map(myHistoryResponse -> myHistoryResponse.getData().getReferrals());
+    }
+
+    public Single<Boolean> setCompleteReference(String description, String referenceId) {
+        return apiService.setReferenceComplete(description, referenceId).map(completeReferralResponse -> completeReferralResponse.getCode() == 200);
     }
 }

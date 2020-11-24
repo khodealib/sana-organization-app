@@ -15,17 +15,18 @@ import com.asenadev.sana.model.remote.ApiServiceProvider;
 import com.asenadev.sana.model.viewmodel.LoginViewModel;
 import com.asenadev.sana.model.viewmodel.ViewModelFactory;
 import com.google.android.material.textfield.TextInputEditText;
-import com.kusu.library.LoadingButton;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String TAG = "LoginActivity";
     private TextInputEditText userNameEt;
     private TextInputEditText passwordEt;
     private LoadingButton loginBtn;
     private TokenHolder tokenHolder;
-
+    private boolean internet;
     private LoginViewModel loginViewModel;
-    private static final String TAG = "LoginActivity";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
         }
-
         initViews();
 
 

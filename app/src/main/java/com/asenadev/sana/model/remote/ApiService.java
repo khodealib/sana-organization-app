@@ -11,6 +11,8 @@ import com.asenadev.sana.model.employee.EmployeeResponse;
 import com.asenadev.sana.model.login.LoginResponse;
 import com.asenadev.sana.model.profile.get.GetProfileResponse;
 import com.asenadev.sana.model.profile.update.UpdateProfileResponse;
+import com.asenadev.sana.model.referral.ReferralResponse;
+import com.asenadev.sana.model.referral.history.MyHistoryResponse;
 
 import io.reactivex.Single;
 import okhttp3.MultipartBody;
@@ -116,4 +118,20 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("customer/submit-departure")
     Single<SubmitDepartureResponse> submitDeparture(@Field("arrival_id") String arrivalId);
+
+    @GET("referrals")
+    Single<ReferralResponse> getReferral();
+
+    @GET("referrals/my-history")
+    Single<MyHistoryResponse> getMyHistory(
+            @Query("national_code") String nationalCode,
+            @Query("date") String date
+    );
+
+    @FormUrlEncoded
+    @POST("complete-reference")
+    Single<CompleteReferralResponse> setReferenceComplete(
+            @Field("description") String description ,
+            @Field("reference_id") String referenceId
+    );
 }

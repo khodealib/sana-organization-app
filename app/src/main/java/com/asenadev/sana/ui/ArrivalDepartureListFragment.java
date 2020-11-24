@@ -29,7 +29,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.kusu.library.LoadingButton;
 import com.nex3z.togglebuttongroup.SingleSelectToggleGroup;
 
-public class CustomerFragment extends Fragment implements CustomerPresentItemAdapter.CustomerPresentItemCallBack {
+public class ArrivalDepartureListFragment extends Fragment implements CustomerPresentItemAdapter.CustomerPresentItemCallBack {
 
     private static final String TAG = "CustomerFragment";
     private CustomerViewModel customerViewModel;
@@ -46,7 +46,7 @@ public class CustomerFragment extends Fragment implements CustomerPresentItemAda
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_customer_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_arrival_departure_list, container, false);
         TokenHolder tokenHolder = new TokenHolder(getContext());
         customerViewModel = new ViewModelProvider(
                 getActivity(), new ViewModelFactory(getActivity().getApplication(),

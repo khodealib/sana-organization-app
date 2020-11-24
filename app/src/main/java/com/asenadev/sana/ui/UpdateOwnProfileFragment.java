@@ -35,7 +35,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 
-public class ProfileFragment extends Fragment implements PicturePickerDialog.PicturePickerCallBack {
+public class UpdateOwnProfileFragment extends Fragment implements PicturePickerDialog.PicturePickerCallBack {
 
     private static final int CAMERA_REQUEST_CODE = 592;
     private static final int GALLERY_REQUEST_CODE = 177;
@@ -50,14 +50,14 @@ public class ProfileFragment extends Fragment implements PicturePickerDialog.Pic
     private ProfileCallBack callBack;
 
 
-    public ProfileFragment(ProfileCallBack callBack) {
+    public UpdateOwnProfileFragment(ProfileCallBack callBack) {
         this.callBack = callBack;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_update_own_profile, container, false);
         TokenHolder tokenHolder = new TokenHolder(getContext());
         profileViewModel = new ViewModelProvider(getActivity(),
                 new ViewModelFactory(getActivity().getApplication(),

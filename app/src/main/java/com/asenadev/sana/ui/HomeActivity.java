@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDialogCallBack, ProfileFragment.ProfileCallBack, MenuItemAdapter.MenuItemCallBack {
+public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDialogCallBack, UpdateOwnProfileFragment.ProfileCallBack, MenuItemAdapter.MenuItemCallBack {
 
     private static final String TAG = "HomeActivity";
     private NavigationView navView;
@@ -145,17 +145,18 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
 
         switch (permission) {
             case MenuGeneratorUtil.DO_REFERRAL_VALUE:
-                transaction(new DashboardFragment(),isCloseDrawer);
+                transaction(new DoReferralFragment(),isCloseDrawer);
                 break;
             case MenuGeneratorUtil.MY_REFERRAL_VALUE:
+                transaction(new ReferralFragment(),isCloseDrawer);
                 break;
             case MenuGeneratorUtil.ARRIVAL_DEPARTURE_VALUE:
-                transaction(new CustomerFragment(),isCloseDrawer);
+                transaction(new ArrivalDepartureListFragment(),isCloseDrawer);
                 break;
             case MenuGeneratorUtil.MY_REFERRAL_HISTORY_VALUE:
                 break;
             case MenuGeneratorUtil.UPDATE_OWN_PROFILE_VALUE:
-                transaction(new ProfileFragment(this),isCloseDrawer);
+                transaction(new UpdateOwnProfileFragment(this),isCloseDrawer);
                 break;
             case MenuGeneratorUtil.REFERRAL_HISTORY_VALUE:
                 break;

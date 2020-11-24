@@ -40,7 +40,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-public class DashboardFragment extends Fragment implements SearchDialog.SearchDialogCallBack, CustomerReferralItemAdapter.ReferralItemCallBack, PicturePickerDialog.PicturePickerCallBack {
+public class DoReferralFragment extends Fragment implements SearchDialog.SearchDialogCallBack, CustomerReferralItemAdapter.ReferralItemCallBack, PicturePickerDialog.PicturePickerCallBack {
     private static final String TAG = "DashboardFragment";
     private static final int GALLERY_REQUEST_CODE = 150;
     private static final int CAMERA_REQUEST_CODE = 151;
@@ -80,7 +80,7 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View view = inflater.inflate(R.layout.fragment_doReferraal, container, false);
         return view;
     }
 

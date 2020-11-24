@@ -42,6 +42,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new ProfileViewModel(application, apiService);
         else if (modelClass.isAssignableFrom(HomeViewModel.class))
             return (T) new HomeViewModel(application,apiService);
+        else if (modelClass.isAssignableFrom(ReferralViewModel.class))
+            return (T) new ReferralViewModel(application,apiService);
 
         return null;
     }

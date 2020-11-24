@@ -74,7 +74,7 @@
 
             <include
                 android:id="@+id/ic_dashboard_not_found_customer"
-                layout="@layout/fragment_dashboard_save_info"
+                layout="@layout/fragment_do_referral_save_info"
                 android:layout_width="match_parent"
                 android:visibility="gone"
                 android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
 
             <include
                 android:id="@+id/ic_dashboard_customer_profile"
-                layout="@layout/customer_profile"
+                layout="@layout/do_referral_customer_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
