@@ -65,6 +65,9 @@ public class LoginViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        disposable.dispose();
+
+        if (disposable !=null) {
+            disposable.dispose();
+        }
     }
 }

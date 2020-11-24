@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.asenadev.sana.model.customer.arrival.departuelist.ArrivalsItem;
 import com.asenadev.sana.model.customer.get.Customer;
 import com.asenadev.sana.model.employee.Employee;
+import com.asenadev.sana.model.profile.get.GetProfileResponse;
 import com.asenadev.sana.model.profile.get.ProfileData;
 import com.asenadev.sana.model.remote.ApiService;
 
@@ -84,8 +85,11 @@ public class HomeRepository {
     }
 
     public Single<ProfileData> getProfile() {
-        return apiService.getProfile().map(getProfileResponse -> getProfileResponse.getProfileData());
+        return apiService.getProfile().map(GetProfileResponse::getProfileData);
     }
+
+
+
 
     public Single<Boolean> updateOwnProfile(String fullName, String nationalCode, File imageFile) {
 

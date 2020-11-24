@@ -133,7 +133,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="شماره همراه"
-            app:layout_constraintBottom_toTopOf="@+id/etl_dashboard_national_code"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout_nationalCode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etl_dashboard_fatherName">
@@ -141,27 +141,41 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_dashboard_phoneNumber"
                 android:layout_width="match_parent"
+                android:inputType="phone"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etl_dashboard_national_code"
+        <LinearLayout
+            android:id="@+id/linearLayout_nationalCode"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:hint="شماره ملی"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etl_dashboard_phoneNumber">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <TextView
                 android:id="@+id/et_dashboard_national_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:text="555"/>
+            <TextView
+                android:text="کدملی"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center|start"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_saveInfo_customer"
@@ -173,12 +187,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:background="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/etl_dashboard_national_code"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout_nationalCode"
             app:srcCompat="@mipmap/ic_launcher" />
 
         <Button
             android:id="@+id/btn_dashboard_choose_pic"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/black"
             android:text="گرفتن عکس"

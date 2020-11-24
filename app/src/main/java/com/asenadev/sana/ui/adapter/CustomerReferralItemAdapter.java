@@ -71,25 +71,31 @@ public class CustomerReferralItemAdapter extends RecyclerView.Adapter<CustomerRe
             referralDateTv = itemView.findViewById(R.id.tv_referralItem_date);
             referralStatusTv = itemView.findViewById(R.id.tv_referralItem_status);
             completeBtn = itemView.findViewById(R.id.btn_referralItem_complete);
-            completeBtn.setVisibility(View.GONE);
 
 
         }
 
         public void bind(ReferralItem referralItem) {
+
+
             referralToTv.setText(referralItem.getEmployeeName());
             referralDateTv.setText(referralItem.getReferred());
             referralStatusTv.setText(referralItem.getStatusLabel());
 
-            if (referralItem.getStatus() == 2) {
-                completeBtn.setVisibility(View.VISIBLE);
+
+            if (referralItem.getStatus() == 1) {
+                completeBtn.setVisibility(View.GONE);
             }
+
             completeBtn.setOnClickListener(view -> {
                 completeBtn.showLoading();
                 callBack.onClickOnComplete(referralItem);
                 completeBtn.hideLoading();
-                completeBtn.setVisibility(View.GONE);
+                if (completeBtn.getVisibility() == View.VISIBLE) {
+                    completeBtn.setVisibility(View.GONE);
+                }
             });
+
 
         }
     }

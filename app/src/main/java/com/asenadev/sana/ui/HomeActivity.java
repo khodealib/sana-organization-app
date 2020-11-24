@@ -1,5 +1,6 @@
 package com.asenadev.sana.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,9 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.asenadev.sana.R;
 import com.asenadev.sana.model.TokenHolder;
@@ -20,25 +22,31 @@ import com.asenadev.sana.model.remote.ApiService;
 import com.asenadev.sana.model.remote.ApiServiceProvider;
 import com.asenadev.sana.model.viewmodel.HomeViewModel;
 import com.asenadev.sana.model.viewmodel.ViewModelFactory;
+import com.asenadev.sana.ui.adapter.MenuItemAdapter;
+import com.asenadev.sana.utils.MenuGeneratorUtil;
 import com.google.android.material.navigation.NavigationView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDialogCallBack, ProfileFragment.ProfileCallBack {
+public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDialogCallBack, ProfileFragment.ProfileCallBack, MenuItemAdapter.MenuItemCallBack {
 
     private static final String TAG = "HomeActivity";
     private NavigationView navView;
     private DrawerLayout drawerLayout;
     private CircularImageView navProfilePicIv;
-    private View headerView;
     private TextView profileFullName;
     private HomeViewModel homeViewModel;
     private ProgressBar progressBar;
-
-
+    private Fragment fragment;
     private View drawerToggle;
+    // menu Item
+    private RecyclerView menuView;
+    private MenuItemAdapter menuItemAdapter;
+    private List<String> permissions = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +56,7 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
         setContentView(R.layout.activity_home);
 
         TokenHolder tokenHolder = new TokenHolder(getApplicationContext());
-        Log.i(TAG, "onCreate: "+tokenHolder.getUserLoginToken());
+        Log.i(TAG, "onCreate: " + tokenHolder.getUserLoginToken());
         ApiServiceProvider.clearRetrofit();
         homeViewModel = new ViewModelProvider(
                 this
@@ -65,80 +73,46 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerToggle = findViewById(R.id.iv_appBar_drawer_toggle);
 
-        headerView = navView.getHeaderView(0);
 
-        profileFullName = headerView.findViewById(R.id.tv_header_fullName);
-        navProfilePicIv = headerView.findViewById(R.id.iv_header_profile_pic);
-        progressBar=findViewById(R.id.pb_home);
+        profileFullName = findViewById(R.id.tv_header_fullName);
+        navProfilePicIv = findViewById(R.id.iv_header_profile_pic);
+
+        progressBar = findViewById(R.id.pb_home);
+
+
+        fragment = getSupportFragmentManager().findFragmentById(R.id.frame_container_home);
+
 
         progressBar.setVisibility(View.VISIBLE);
         updateProfile();
         progressBar.setVisibility(View.GONE);
+
 
         drawerToggle.setOnClickListener(view -> {
             drawerLayout.openDrawer(GravityCompat.START, true);
         });
 
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.frame_container_home, new DashboardFragment(), null);
-        transaction.commit();
 
-        navView.setNavigationItemSelectedListener(item -> {
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_container_home);
-            int itemId = item.getItemId();
-            if (itemId == R.id.mi_customer_list) {
-                if (fragment != null) {
-
-                    drawerLayout.closeDrawer(GravityCompat.START, true);
-
-                    FragmentTransaction customerTransaction = getSupportFragmentManager().beginTransaction();
-                    customerTransaction.replace(R.id.frame_container_home, new CustomerFragment());
-                    customerTransaction.addToBackStack(null);
-                    customerTransaction.commit();
-
-
-                }
-            } else if (itemId == R.id.mi_profile_page) {
-                if (fragment != null) {
-                    drawerLayout.closeDrawer(GravityCompat.START, true);
-                    transaction.replace(R.id.frame_container_home, new ProfileFragment(this));
-
-                    FragmentTransaction profileTransaction = getSupportFragmentManager().beginTransaction();
-                    profileTransaction.replace(R.id.frame_container_home, new ProfileFragment(this));
-                    profileTransaction.addToBackStack(null);
-                    profileTransaction.commit();
-
-                }
-            } else if (itemId == R.id.mi_exit) {
-                ExitDialog exitDialog = new ExitDialog(this);
-                exitDialog.show(getSupportFragmentManager(), null);
-            } else if (itemId == R.id.mi_present) {
-                if (fragment != null) {
-                    drawerLayout.closeDrawer(GravityCompat.START, true);
-                    FragmentTransaction presentTransaction = getSupportFragmentManager().beginTransaction();
-                    presentTransaction.replace(R.id.frame_container_home, new DashboardFragment());
-                    presentTransaction.addToBackStack(null);
-                    presentTransaction.commit();
-                }
-            } else if (itemId == R.id.mi_dashboard) {
-                drawerLayout.closeDrawer(GravityCompat.START, true);
-                FragmentTransaction dashboardTransaction = getSupportFragmentManager().beginTransaction();
-                dashboardTransaction.replace(R.id.frame_container_home, new DashboardFragment());
-                dashboardTransaction.addToBackStack(null);
-                dashboardTransaction.commit();
-            }
-            return false;
-        });
     }
+
 
     public void updateProfile() {
 
-        homeViewModel.getProfile().observe(HomeActivity.this ,profileData -> {
-            Log.i(TAG, "updateProfile: "+profileData.toString());
+        homeViewModel.getProfile().observe(HomeActivity.this, profileData -> {
+            Log.i(TAG, "updateProfile: " + profileData.toString());
             profileFullName.setText(profileData.getName());
-            if (profileData.getProfilePic()!=null) {
+
+            permissions = MenuGeneratorUtil.getItemMenu(profileData.getPermissions());
+            if (menuItemAdapter == null) {
+                menuView = findViewById(R.id.rv_menu_Item);
+                menuView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+                menuItemAdapter = new MenuItemAdapter(permissions, this);
+                menuView.setAdapter(menuItemAdapter);
+                menuItemOnClickListener(permissions.get(0),true);
+            }
+            Log.i(TAG, "updateProfile: " + permissions.toString());
+            if (profileData.getProfilePic() != null) {
                 Picasso.get()
                         .load(profileData.getProfilePic())
                         .into(navProfilePicIv);
@@ -152,7 +126,10 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
         if (result) {
             TokenHolder tokenHolder = new TokenHolder(this);
             tokenHolder.saveUserLoginToken("");
-            Log.i(TAG, "exitListener: "+tokenHolder.getUserLoginToken());
+
+//            Log.i(TAG, "exitListener: "+tokenHolder.getUserLoginToken());
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             finish();
         }
     }
@@ -161,5 +138,47 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
     public void onSaveProfileListener() {
         Log.i(TAG, "onSaveProfileListener: updated profile");
         updateProfile();
+    }
+
+    @Override
+    public void menuItemOnClickListener(String permission, boolean isCloseDrawer) {
+
+        switch (permission) {
+            case MenuGeneratorUtil.DO_REFERRAL_VALUE:
+                transaction(new DashboardFragment(),isCloseDrawer);
+                break;
+            case MenuGeneratorUtil.MY_REFERRAL_VALUE:
+                break;
+            case MenuGeneratorUtil.ARRIVAL_DEPARTURE_VALUE:
+                transaction(new CustomerFragment(),isCloseDrawer);
+                break;
+            case MenuGeneratorUtil.MY_REFERRAL_HISTORY_VALUE:
+                break;
+            case MenuGeneratorUtil.UPDATE_OWN_PROFILE_VALUE:
+                transaction(new ProfileFragment(this),isCloseDrawer);
+                break;
+            case MenuGeneratorUtil.REFERRAL_HISTORY_VALUE:
+                break;
+            case MenuGeneratorUtil.IMPORT_EMPLOYEE_VALUE:
+                break;
+            case MenuGeneratorUtil.EMPLOYEE_LIST_VALUE:
+                break;
+            case MenuGeneratorUtil.MANAGE_ROLES_VALUE:
+                break;
+            case MenuGeneratorUtil.EXIT_VALUE:
+                ExitDialog exitDialog = new ExitDialog(this);
+                exitDialog.show(getSupportFragmentManager().beginTransaction(), null);
+                break;
+        }
+
+    }
+
+    public void transaction(Fragment fragment, boolean isCloseDrawer) {
+        if (!isCloseDrawer)
+            drawerLayout.closeDrawer(GravityCompat.START, true);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_container_home, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

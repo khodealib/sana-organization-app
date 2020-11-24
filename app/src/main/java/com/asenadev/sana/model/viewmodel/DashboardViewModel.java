@@ -155,7 +155,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-
+                        isRefersTo.postValue(Boolean.FALSE);
                     }
                 });
 
@@ -205,6 +205,7 @@ public class DashboardViewModel extends AndroidViewModel {
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                         Log.i(TAG, "onError: " + e.getMessage() + e.toString());
+                        isExited.postValue(Boolean.FALSE);
                     }
                 });
 

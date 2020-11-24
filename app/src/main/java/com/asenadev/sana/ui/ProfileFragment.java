@@ -1,16 +1,18 @@
 package com.asenadev.sana.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,7 +28,10 @@ import com.asenadev.sana.model.viewmodel.ProfileViewModel;
 import com.asenadev.sana.model.viewmodel.ViewModelFactory;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kusu.library.LoadingButton;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 
@@ -37,7 +42,7 @@ public class ProfileFragment extends Fragment implements PicturePickerDialog.Pic
     private static final String TAG = "ProfileFragment";
     private ProfileViewModel profileViewModel;
     private TextInputEditText fullNameEt;
-    private TextInputEditText nationalCode;
+    private TextView nationalCode;
     private ImageView profilePicIv;
     private Button uploadProfilePic;
     private LoadingButton saveProfileBtn;
@@ -90,42 +95,58 @@ public class ProfileFragment extends Fragment implements PicturePickerDialog.Pic
             dialog.show(getFragmentManager(), null);
 
 
-            
         });
-
 
 
         saveProfileBtn.setOnClickListener(view1 -> {
             saveProfileBtn.showLoading();
-            if (!fullNameEt.getText().toString().equals("")&& !nationalCode.getText().toString().equals("")){
-                if (imageFile!=null) {
-                    profileViewModel.updateProfile(fullNameEt.getText().toString() , nationalCode.getText().toString() , imageFile)
-                            .observe(getActivity() , isUpdated -> {
+            if (!fullNameEt.getText().toString().equals("") && !nationalCode.getText().toString().equals("")) {
+                if (imageFile != null) {
+                    profileViewModel.updateProfile(fullNameEt.getText().toString(), nationalCode.getText().toString(), imageFile)
+                            .observe(getActivity(), isUpdated -> {
                                 Toast.makeText(getContext(), "پروفایل ذخیره شد", Toast.LENGTH_SHORT).show();
+                                callBack.onSaveProfileListener();
                             });
                 } else {
-                    profileViewModel.updateProfile(fullNameEt.getText().toString(),nationalCode.getText().toString())
-                            .observe(getActivity(), isUpdated-> Toast.makeText(getContext(), "پروفایل ذخیره شد.", Toast.LENGTH_SHORT).show());
+                    profileViewModel.updateProfile(fullNameEt.getText().toString(), nationalCode.getText().toString())
+                            .observe(getActivity(), isUpdated -> {
+                                Toast.makeText(getContext(), "پروفایل ذخیره شد.", Toast.LENGTH_SHORT).show();
+                                callBack.onSaveProfileListener();
+                            });
                 }
             }
-            
+
             saveProfileBtn.hideLoading();
-            callBack.onSaveProfileListener();
+
         });
     }
 
     @Override
     public void onGalleryClickListener() {
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto, GALLERY_REQUEST_CODE);
+        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Permissions.check(getContext(), permissions, null, null, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto, GALLERY_REQUEST_CODE);
+            }
+        });
 
     }
 
     @Override
     public void onCameraClickListener() {
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture, CAMERA_REQUEST_CODE);
+        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Permissions.check(getContext(), permissions, null, null, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, CAMERA_REQUEST_CODE);
+            }
+        });
     }
 
     @Override
@@ -137,22 +158,38 @@ public class ProfileFragment extends Fragment implements PicturePickerDialog.Pic
 
             case GALLERY_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri imagePath = imageReturnedIntent.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    if (!filePathColumn.equals(null)){
-                        Cursor cursor=getActivity().getContentResolver().query(imagePath,filePathColumn,null,null,null);
-                        cursor.moveToFirst();
-                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        String picturePath = cursor.getString(columnIndex);
-                        cursor.close();
+                    Uri imageUri = imageReturnedIntent.getData();
 
-                        imageFile = new File(picturePath);
-                    }
+                    CropImage.activity(imageUri)
+                            .start(getContext(),this);
+
+
+                }
+                break;
+
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                CropImage.ActivityResult result = CropImage.getActivityResult(imageReturnedIntent);
+                Log.i(TAG, "onActivityResult: "+result.getUri().getPath());
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri imageUri = result.getUri();
+
+//                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                    Cursor cursor = getActivity().getContentResolver().query(imageUri, filePathColumn, null, null, null);
+//                    cursor.moveToFirst();
+//                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                    String picturePath = cursor.getString(columnIndex);
+//                    cursor.close();
+
+
+                    imageFile = new File(imageUri.getPath());
                     Picasso.get()
                             .load(imageFile)
                             .into(profilePicIv);
-
                 }
+                break;
+            case CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE:
+                CropImage.ActivityResult resultError = CropImage.getActivityResult(imageReturnedIntent);
+                Log.i(TAG, "onActivityResult: "+ resultError.getError());
                 break;
         }
     }

@@ -67,7 +67,7 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
     private TextInputEditText customerFirstNameEt;
     private TextInputEditText customerLastNameEt;
     private TextInputEditText customerFatherNameEt;
-    private TextInputEditText customerNationalCodeEt;
+    private TextView customerNationalCodeEt;
     private TextInputEditText customerPhoneNumberEt;
     private LoadingButton saveCustomerProfileBtn;
     private Button customerChoosePicBtn;
@@ -293,7 +293,18 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
             dashboardViewModel.setCustomerReferral(
                     customerGet.getId(), employee.getId(), "test"
             ).observe(getActivity(), isRefersTo -> {
-                Toast.makeText(getContext(), "ارجاع داده شد", Toast.LENGTH_SHORT).show();
+                if (isRefersTo){
+
+                    Toast.makeText(getContext(), "ارجاع داده شد", Toast.LENGTH_SHORT).show();
+                    dashboardViewModel.getCustomerProfile(customerGet.getNationalCode())
+                            .observe(getActivity() , customer -> {
+                                if (customer.getReferrals()!=null) {
+                                    Log.i(TAG, "onEmployeeItemListener: "+customer.getReferrals().toString());
+                                    adapterReferralList.updateStatus(customer.getReferrals());
+                                }
+                            });
+                } else
+                    Toast.makeText(getContext(), "آخرین ارجاع تکمیل نشده است!", Toast.LENGTH_SHORT).show();
             });
             refersToBtn.hideLoading();
 
@@ -305,12 +316,7 @@ public class DashboardFragment extends Fragment implements SearchDialog.SearchDi
 
             employeeNameTv.setText("ارجاع به");
 
-            dashboardViewModel.getCustomerProfile(customerGet.getNationalCode())
-                    .observe(getActivity() , customer -> {
-                        if (customer.getReferrals()!=null) {
-                            adapterReferralList.updateStatus(customer.getReferrals());
-                        }
-                    });
+
         });
     }
 

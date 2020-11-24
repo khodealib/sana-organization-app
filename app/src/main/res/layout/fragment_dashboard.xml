@@ -66,8 +66,8 @@
                 android:backgroundTint="@color/black"
                 android:fontFamily="@font/font_regular"
                 android:text="بررسی"
-                app:lb_loaderWidth="5dp"
                 android:textColor="@color/white"
+                android:padding="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/etl_dashboard_referral_national_code"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/etl_dashboard_referral_national_code" />
