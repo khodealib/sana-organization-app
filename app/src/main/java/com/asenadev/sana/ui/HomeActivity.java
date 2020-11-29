@@ -171,7 +171,6 @@ public class HomeActivity extends AppCompatActivity implements ExitDialog.ExitDi
                 exitDialog.show(getSupportFragmentManager().beginTransaction(), null);
                 break;
         }
-
     }
 
     public void transaction(Fragment fragment, boolean isCloseDrawer) {

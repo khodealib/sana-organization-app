@@ -43,15 +43,20 @@ public class SetDescriptionDialog extends DialogFragment {
         descriptionChb.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 description.setVisibility(View.GONE);
+            } else description.setVisibility(View.VISIBLE);
+
+        });
+
+        cancelProcess.setOnClickListener(view1 -> dismiss());
+
+        completeProcess.setOnClickListener(view1 -> {
+            if (description.getVisibility() == View.VISIBLE) {
+                callBack.onCompleteProcessButtonListener(description.getText().toString());
+            } else {
+                callBack.onCompleteProcessButtonListener(null);
             }
 
-            cancelProcess.setOnClickListener(view1 -> dismiss());
-
-            completeProcess.setOnClickListener(view1 -> {
-                if (description.getVisibility() == View.VISIBLE) {
-                    callBack.onCompleteProcessButtonListener(description.getText().toString());
-                } else callBack.onCompleteProcessButtonListener(null);
-            });
+            dismiss();
         });
 
         return builder.create();

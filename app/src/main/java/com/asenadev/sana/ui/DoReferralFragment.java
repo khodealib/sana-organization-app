@@ -80,7 +80,7 @@ public class DoReferralFragment extends Fragment implements SearchDialog.SearchD
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_doReferraal, container, false);
+        View view = inflater.inflate(R.layout.fragment_do_referral, container, false);
         return view;
     }
 

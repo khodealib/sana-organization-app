@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:orientation="vertical"
-    android:padding="32dp"
     android:layout_height="wrap_content">
 
     <TextView
@@ -10,6 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_gravity="end"
         android:text="توضیحات را وارد کنید"
         android:fontFamily="@font/font_bold"
@@ -26,6 +27,8 @@
         android:ems="10"
         android:inputType="text"
         android:padding="10dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:hint="توضیحات فرآیند را وارد کنید"
         android:textSize="15sp"
         android:gravity="top|start"
@@ -37,6 +40,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="عدم وجود توضیحات"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layoutDirection="rtl"
         android:layout_gravity="end"/>
 
@@ -44,6 +50,9 @@
         android:id="@+id/btn_cancel_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:letterSpacing="0"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="بستن"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:textColor="@color/primaryDarkColor"
@@ -53,6 +62,9 @@
     <Button
         android:id="@+id/btn_complete_process"
         android:layout_width="match_parent"
+        android:letterSpacing="0"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_height="wrap_content"
         android:text="تکمیل فرآیند" />
 

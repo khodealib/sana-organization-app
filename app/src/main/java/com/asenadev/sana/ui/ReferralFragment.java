@@ -27,11 +27,12 @@ public class ReferralFragment extends Fragment implements ReferralItemAdapter.Re
     private RecyclerView referralItemRv;
     private ReferralItemAdapter referralItemAdapter;
     private ReferralViewModel referralViewModel;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_referrals, container, false);
+        view = inflater.inflate(R.layout.fragment_referrals, container, false);
         TokenHolder tokenHolder = new TokenHolder(getContext());
         referralViewModel = new ViewModelProvider(getActivity(),
                 new ViewModelFactory(getActivity().getApplication(), ApiServiceProvider.createService(ApiService.class, tokenHolder.getUserLoginToken())))
@@ -55,10 +56,6 @@ public class ReferralFragment extends Fragment implements ReferralItemAdapter.Re
                 });
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
 
     @Override
     public void onCompleteProcessButtonClickListener(ReferralDataItem referralDataItem) {
@@ -66,7 +63,10 @@ public class ReferralFragment extends Fragment implements ReferralItemAdapter.Re
         SetDescriptionDialog setDescriptionDialog = new SetDescriptionDialog(description -> {
             referralViewModel.setCompleteProcess(description , referralDataItem.getId())
                     .observe(this,isSuccess ->{
-                        if (isSuccess) SimpleToast.ok(getContext(),"فرآیند تکمیل شد");
+                        if (isSuccess) {
+                            SimpleToast.ok(getContext(),"فرآیند تکمیل شد");
+                            updateListReferral(view);
+                        }
                     });
         });
         setDescriptionDialog.setCancelable(false);
